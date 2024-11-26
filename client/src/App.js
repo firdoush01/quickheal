@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useRef } from "react";
+import "./App.css";
+import { socket } from "./utils/socket";
+import RTCManager from "./core/RTCManager";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/doctor/Home";
+import DoctorAuth from "./pages/doctor/auth/page";
+import DoctorDashboard from "./pages/doctor/dashboard/page";
+
+const connection = {
+  connectionType: "patient",
+  token:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50SWQiOiI2NzQ1ZWJlZDYwYmViZjhlMDA3YjlkYmMiLCJwYXRpZW50TmFtZSI6IlN1aGFpbCIsImNvbm5lY3Rpb25UeXBlIjoicGF0aWVudCIsImlhdCI6MTczMjYzNzU4MywiZXhwIjoxNzMyNjU1NTgzfQ.aG6AHa2XwMLR8dWDsVSZZC4soxqQaJeYWA88J-x_gL4",
+};
+
+const rtcmanager = new RTCManager();
 
 function App() {
+  const videoRef = useRef();
+  useEffect(() => {
+    // socket.on("pong", () => {
+    //   socket.emit("connection-type", connection);
+    // });
+    // (async () => {
+    //   const stream = await rtcmanager.fetchMedia();
+    //   videoRef.current.srcObject = stream;
+    // })();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/auth/doctor" element={<DoctorAuth />} />
+        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
