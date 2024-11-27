@@ -46,6 +46,60 @@ class APICalls {
 
     return response;
   }
+
+  async loginAdmin(email, password) {
+    const response = await axios.post(
+      `${this.#server_url}/api/v1/auth/admin/login`,
+      {
+        email,
+        password,
+      }
+    );
+
+    return response;
+  }
+  async registerAdmin(name, email, password) {
+    const response = await axios.post(
+      `${this.#server_url}/api/v1/auth/admin/register`,
+      {
+        headers: {
+          authorization: `Bearer ${process.env.PASSCODE}`,
+        },
+      },
+      {
+        name,
+        email,
+        password,
+      }
+    );
+
+    return response;
+  }
+  async emptyDoctorQueue() {
+    const response = await axios.post(
+      `${this.#server_url}/api/v1/admin/empty/doctors`,
+      {
+        headers: {
+          authorization: `Bearer `,
+        },
+      }
+    );
+
+    return response;
+  }
+
+  async emptyPatientQueue() {
+    const response = await axios.post(
+      `${this.#server_url}/api/v1/admin/empty/patients`,
+      {
+        headers: {
+          authorization: `Bearer `,
+        },
+      }
+    );
+
+    return response;
+  }
 }
 
 const apiCalls = new APICalls();

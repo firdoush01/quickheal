@@ -6,12 +6,17 @@ import DoctorDashboard from "./pages/doctor/dashboard/page";
 import PatientAuth from "./pages/patient/auth/page";
 import PatientDashboard from "./pages/patient/dashboard/page";
 import Meet from "./pages/Meet";
+import AdminPage from "./pages/admin/page";
+import AdminAuth from "./pages/admin/auth/page";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/auth" element={<AdminAuth />} />
+
         <Route path="/auth/doctor" element={<DoctorAuth />} />
         <Route path="/auth/patient" element={<PatientAuth />} />
 

@@ -36,7 +36,12 @@ class PDManager {
   }
 
   addPatient(patient: Patient): void {
-    this.waitingPatients.push(patient);
+    const foundPatient = this.waitingPatients.find(
+      (p) => p.getId() === p.getId()
+    );
+    if (!foundPatient) {
+      this.waitingPatients.push(patient);
+    }
   }
 
   getAvailableDoctors(): Doctor[] {
