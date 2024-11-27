@@ -18,13 +18,13 @@ const LoginComponent = ({ setIsLogin }) => {
     setError("");
 
     try {
-      const response = await apiCalls.loginDoctor(email, password);
+      const response = await apiCalls.loginPatient(email, password);
       if (response.status === 200) {
         // Redirect to the doctor's dashboard or home page upon successful login
         console.log(response);
         window.localStorage.setItem("data", JSON.stringify(response.data.data));
 
-        navigate("/dashboard/doctor");
+        navigate("/dashboard/patient");
       }
     } catch (error) {
       setError("Invalid credentials. Please try again.");
@@ -33,7 +33,7 @@ const LoginComponent = ({ setIsLogin }) => {
 
   return (
     <div>
-      <h2>Doctor Login</h2>
+      <h2>Patient Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email</label>
@@ -67,8 +67,8 @@ const LoginComponent = ({ setIsLogin }) => {
 const RegisterComponent = ({ setIsLogin }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
-  const [specialization, setSpecialization] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -85,11 +85,11 @@ const RegisterComponent = ({ setIsLogin }) => {
     }
 
     try {
-      const response = await apiCalls.registerDoctor(
+      const response = await apiCalls.registerPatient(
         name,
         email,
         password,
-        specialization
+        age
       );
       if (response.status === 201) {
         setIsLogin(true);
@@ -101,7 +101,7 @@ const RegisterComponent = ({ setIsLogin }) => {
 
   return (
     <div>
-      <h2>Doctor Registration</h2>
+      <h2>Patient Registration</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Name</label>
@@ -113,11 +113,11 @@ const RegisterComponent = ({ setIsLogin }) => {
           />
         </div>
         <div>
-          <label>Specialization</label>
+          <label>Age</label>
           <input
             type="text"
-            value={specialization}
-            onChange={(e) => setSpecialization(e.target.value)}
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
             required
           />
         </div>
@@ -159,7 +159,7 @@ const RegisterComponent = ({ setIsLogin }) => {
   );
 };
 
-const DoctorAuth = () => {
+const PatientAuth = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
@@ -173,4 +173,4 @@ const DoctorAuth = () => {
   );
 };
 
-export default DoctorAuth;
+export default PatientAuth;

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Patient {
-    constructor(name, description) {
-        this.id = Patient.inc++;
+    constructor(id, name, description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
@@ -22,5 +22,4 @@ class Patient {
         this.description = description;
     }
 }
-Patient.inc = 1; // Static counter for unique IDs
 exports.default = Patient;

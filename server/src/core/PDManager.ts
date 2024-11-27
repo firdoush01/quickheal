@@ -4,13 +4,15 @@ import Patient from "./Patient";
 import Session from "./Session";
 
 interface IMatch {
+  doctorId: string;
+  patientId: string;
   doctorSocketId: string;
   patientSocketId: string;
 }
 
 class PDManager {
   private static instance: PDManager | null = null;
-  private unAvailableDoctors: Doctor[] = [];
+  private doctors: Doctor[] = [];
   private availableDoctors: Doctor[] = [];
   private waitingPatients: Patient[] = [];
   private session: Session[] = [];
@@ -26,61 +28,69 @@ class PDManager {
     return this.instance;
   }
 
-  addDoctor(doctor: Doctor): Doctor {
-    if (doctor.getAvailability()) this.availableDoctors.push(doctor);
-    else this.unAvailableDoctors.push(doctor);
-    return doctor;
+  addDoctor(doctor: Doctor): void {
+    this.doctors.push(doctor);
   }
 
   addPatient(patient: Patient): void {
     this.waitingPatients.push(patient);
   }
 
-  getAvailableDoctors(): String[] {
-    return this.availableDoctors.map((a) => a.getName());
+  getAvailableDoctors(): Doctor[] {
+    return this.availableDoctors;
   }
-  getUnAvailableDoctors(): String[] {
-    return this.unAvailableDoctors.map((a) => a.getName());
+
+  getDoctors(): Doctor[] {
+    return this.doctors;
+  }
+
+  getUnAvailableDoctors(): Doctor[] {
+    return this.doctors.filter((d) => d.getAvailability() === false);
   }
 
   getWaitingPatients(): string[] {
     return this.waitingPatients.map((patient) => patient.getName());
   }
 
-  setDoctorAvailablity(doctorId: string, available: boolean) {
-    const doctor = this.unAvailableDoctors.find((d) => d.getId() === doctorId);
+  addToAvailableDoctor(doctor: Doctor): void {
+    if (!this.availableDoctors.includes(doctor)) {
+      this.availableDoctors.push(doctor);
+    }
+  }
+  removeFromAvailableDoctor(doctor: Doctor): void {
+    this.availableDoctors = this.availableDoctors.filter(
+      (d) => d.getId() !== doctor.getId()
+    );
+  }
 
-    if (doctor === undefined) return;
+  setDoctorAvailablity(doctorId: string, available: boolean): void {
+    const doctor = this.doctors.find((d) => d.getId() === doctorId);
+
+    if (doctor === undefined) {
+      console.log("Doctor not in the list.");
+
+      return;
+    }
 
     if (available) {
-      if (doctor) {
-        doctor.setAvailable(true);
-        this.addDoctor(doctor);
-      }
+      doctor.setAvailable(true);
+      this.addToAvailableDoctor(doctor);
     } else {
-      this.availableDoctors = this.availableDoctors.filter(
-        (d) => d.getId() !== doctor.getId()
-      );
-
-      this.unAvailableDoctors.push(doctor);
+      doctor.setAvailable(false);
+      this.removeFromAvailableDoctor(doctor);
     }
   }
 
   removeDoctor(id: String) {
-    this.availableDoctors = this.availableDoctors.filter(
-      (d) => d.getId() !== id
-    );
-    this.unAvailableDoctors = this.unAvailableDoctors.filter(
-      (d) => d.getId() !== id
-    );
+    this.doctors = this.doctors.filter((d) => d.getId() !== id);
   }
 
   mapIdToSocket(doctorId: string, socketId: string) {
     this.idSocketMap[doctorId] = socketId;
   }
 
-  getIdSocketMap(): Record<string, string> {
-    return this.idSocketMap;
+  getSocketIdFromMap(id: string) {
+    return this.idSocketMap[id];
   }
 
   matchConsultation(): IMatch | null {
@@ -88,23 +98,22 @@ class PDManager {
 
     let doctor: Doctor | undefined;
     let patient: Patient | undefined;
-    let newSession: Session | null;
 
     if (this.availableDoctors.length > 0) {
       doctor = this.availableDoctors.shift()!;
       patient = this.waitingPatients.shift()!;
-      const dockerSocketId = this.idSocketMap[doctor.getId()];
-      const patientSocketId = this.idSocketMap[patient.getId()];
+      const doctorId = doctor.getId();
+      const patientId = patient.getId();
 
-      // newSession = new Session(
-      //   UID.generate(10),
-      //   doctor,
-      //
-      // );
-      // this.session.push(newSession);
-      // return newSession;
+      const dockerSocketId = this.idSocketMap[doctorId];
+      const patientSocketId = this.idSocketMap[patientId];
+
+      const newSession = new Session(UID.generate(10), doctor, patient);
+      this.session.push(newSession);
 
       return {
+        doctorId: doctorId,
+        patientId: patientId,
         doctorSocketId: dockerSocketId,
         patientSocketId: patientSocketId,
       };

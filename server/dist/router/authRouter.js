@@ -16,9 +16,9 @@ const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 const express_1 = __importDefault(require("express"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const Doctor_1 = __importDefault(require("../models/Doctor"));
 const Patient_1 = __importDefault(require("../models/Patient"));
+const role_1 = __importDefault(require("../types/role"));
 const router = express_1.default.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 // Doctor Registration
@@ -81,14 +81,17 @@ router.post("/doctor/login", (req, res) => __awaiter(void 0, void 0, void 0, fun
             res.status(401).json({ error: "Invalid password" });
             return;
         }
-        console.log(JWT_SECRET);
-        const token = jsonwebtoken_1.default.sign({
-            doctorId: doctor._id,
-            doctorName: doctor.name,
-            doctorApproved: doctor.approved,
-            connectionType: "doctor",
-        }, JWT_SECRET, { expiresIn: "3h" });
-        res.json({ message: "Login successful", token });
+        res.json({
+            message: "Login successful",
+            data: {
+                id: doctor._id,
+                name: doctor.name,
+                email: doctor.email,
+                specialization: doctor.specialization,
+                approved: doctor.approved,
+                connectionType: role_1.default.DOCTOR,
+            },
+        });
         return;
     }
     catch (err) {
@@ -109,14 +112,16 @@ router.post("/patient/login", (req, res) => __awaiter(void 0, void 0, void 0, fu
             res.status(401).json({ error: "Invalid password" });
             return;
         }
-        const token = jsonwebtoken_1.default.sign({
-            patientId: patient._id,
-            patientName: patient.name,
-            connectionType: "patient",
-        }, JWT_SECRET, {
-            expiresIn: "5h",
+        res.json({
+            message: "Login successful",
+            data: {
+                id: patient._id,
+                email: patient.email,
+                name: patient.name,
+                age: patient.age,
+                connectionType: role_1.default.PATIENT,
+            },
         });
-        res.json({ message: "Login successful", token });
     }
     catch (err) {
         res.status(500).json({ error: "Error logging in", details: err.message });

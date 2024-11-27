@@ -18,13 +18,16 @@ class RTCManager {
   #localStream;
   #remoteStream;
   #didIOffer = false;
-  #userType;
+  #userId;
 
-  constructor(userType) {
-    this.#userType = userType;
+  getStream() {
+    return {
+      localStream: this.#localStream,
+      remoteStream: this.#remoteStream,
+    };
   }
 
-  async call() {
+  async call(userId) {
     await this.fetchMedia();
     await this.createPeerConnection();
 
@@ -34,6 +37,7 @@ class RTCManager {
 
       this.#peerConnection.setLocalDescription(offer);
       this.#didIOffer = true;
+      this.#userId = userId;
       socket.emit("newOffer", offer);
     } catch (error) {
       console.log(error);
@@ -53,7 +57,12 @@ class RTCManager {
 
     offerIceCandidates.forEach((c) => {
       this.#peerConnection.addIceCandidate(c);
+      console.log("Added Ice Candidate");
     });
+  }
+
+  async addAnswer(offerObj) {
+    await this.#peerConnection.setRemoteDescription(offerObj.answer);
   }
 
   // fetchmedia
@@ -74,7 +83,7 @@ class RTCManager {
   // create pc
   createPeerConnection(offerObj) {
     return new Promise(async (resolve, reject) => {
-      this.#peerConnection = await new RTCPeerConnection(peerConfiguration);
+      this.#peerConnection = new RTCPeerConnection(peerConfiguration);
       this.#remoteStream = new MediaStream();
 
       this.#localStream.getTracks().forEach((track) => {
@@ -90,7 +99,7 @@ class RTCManager {
         if (e.candidate) {
           socket.emit("sendIceCandidateToSignalingServer", {
             iceCandidate: e.candidate,
-            iceUserName: this.#userType,
+            iceUserId: this.#userId,
             didIOffer: this.#didIOffer,
           });
         }
@@ -110,7 +119,14 @@ class RTCManager {
       resolve(this.#remoteStream);
     });
   }
+
+  addNewIceCandidate(iceCandidate) {
+    this.#peerConnection.addIceCandidate(iceCandidate);
+    console.log("Added Ice Candidate");
+  }
   // offer
 }
 
-export default RTCManager;
+const rtcmanager = new RTCManager();
+
+export default rtcmanager;

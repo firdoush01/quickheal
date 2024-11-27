@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Doctor from "../models/Doctor";
 import Patient from "../models/Patient";
+import Role from "../types/role";
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET as string;
@@ -100,17 +101,17 @@ router.post(
         return;
       }
 
-      const token = jwt.sign(
-        {
-          doctorId: doctor._id,
-          doctorName: doctor.name,
-          doctorApproved: doctor.approved,
-          connectionType: "doctor",
+      res.json({
+        message: "Login successful",
+        data: {
+          id: doctor._id,
+          name: doctor.name,
+          email: doctor.email,
+          specialization: doctor.specialization,
+          approved: doctor.approved,
+          connectionType: Role.DOCTOR,
         },
-        JWT_SECRET,
-        { expiresIn: "3h" }
-      );
-      res.json({ message: "Login successful", token });
+      });
       return;
     } catch (err: any) {
       res.status(500).json({ error: "Error logging in", details: err.message });
@@ -125,6 +126,7 @@ router.post(
     const { email, password } = req.body;
     try {
       const patient = await Patient.findOne({ email });
+
       if (!patient) {
         res.status(404).json({ error: "Patient not found" });
         return;
@@ -135,18 +137,17 @@ router.post(
         res.status(401).json({ error: "Invalid password" });
         return;
       }
-      const token = jwt.sign(
-        {
-          patientId: patient._id,
-          patientName: patient.name,
-          connectionType: "patient",
+
+      res.json({
+        message: "Login successful",
+        data: {
+          id: patient._id,
+          email: patient.email,
+          name: patient.name,
+          age: patient.age,
+          connectionType: Role.PATIENT,
         },
-        JWT_SECRET,
-        {
-          expiresIn: "5h",
-        }
-      );
-      res.json({ message: "Login successful", token });
+      });
     } catch (err: any) {
       res.status(500).json({ error: "Error logging in", details: err.message });
     }

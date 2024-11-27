@@ -1,16 +1,15 @@
 class Patient {
-  private static inc = 1; // Static counter for unique IDs
-  private id: number;
+  private id: string;
   private name: string;
   private description: string;
 
-  constructor(name: string, description: string) {
-    this.id = Patient.inc++;
+  constructor(id: string, name: string, description: string) {
+    this.id = id;
     this.name = name;
     this.description = description;
   }
 
-  public getId(): number {
+  public getId(): string {
     return this.id;
   }
 
