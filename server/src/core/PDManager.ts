@@ -29,7 +29,10 @@ class PDManager {
   }
 
   addDoctor(doctor: Doctor): void {
-    this.doctors.push(doctor);
+    const foundDoctor = this.doctors.find((d) => d.getId() === doctor.getId());
+    if (!foundDoctor) {
+      this.doctors.push(doctor);
+    }
   }
 
   addPatient(patient: Patient): void {
@@ -83,6 +86,13 @@ class PDManager {
 
   removeDoctor(id: String) {
     this.doctors = this.doctors.filter((d) => d.getId() !== id);
+  }
+
+  emptyDoctors() {
+    this.doctors = [];
+  }
+  emptyPatient() {
+    this.waitingPatients = [];
   }
 
   mapIdToSocket(doctorId: string, socketId: string) {

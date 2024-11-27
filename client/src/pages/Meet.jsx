@@ -12,9 +12,9 @@ function Meet() {
   const remoteRef = useRef();
 
   useEffect(() => {
-    socket.on("answerResponse", (offerObj) => {
+    socket.on("answerResponse", async (offerObj) => {
       console.log(offerObj);
-      rtcmanager.addAnswer(offerObj);
+      await rtcmanager.addAnswer(offerObj);
     });
 
     socket.on("receivedIceCandidateFromServer", (iceCandidate) => {
@@ -36,8 +36,8 @@ function Meet() {
       }
     })();
 
-    localRef.current.srcObject = rtcmanager.getStream().localStream;
-    remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
+    // localRef.current.srcObject = rtcmanager.getStream().localStream;
+    // remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
   }, []);
 
   return (

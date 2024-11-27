@@ -56,6 +56,9 @@ class RTCManager {
     const answer = await this.#peerConnection.createAnswer({});
     await this.#peerConnection.setLocalDescription(answer);
 
+    console.log(offerObj);
+    console.log(answer);
+
     offerObj.answer = answer;
 
     const offerIceCandidates = await socket.emitWithAck("newAnswer", offerObj);
@@ -64,6 +67,7 @@ class RTCManager {
       this.#peerConnection.addIceCandidate(c);
       console.log("Added Ice Candidate");
     });
+    console.log(offerIceCandidates);
   }
 
   async addAnswer(offerObj) {

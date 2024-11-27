@@ -10,6 +10,7 @@ import fs from "fs";
 
 import connectDB from "./utils/connectDB";
 import authRouter from "./router/authRouter";
+import adminRouter from "./router/adminRouter";
 
 import PatientDB from "./models/Patient";
 import DoctorDB from "./models/Doctor";
@@ -65,6 +66,7 @@ app.get("/", (req, res) => {
 
 // Routers
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/admin", adminRouter);
 
 // Socket Operations
 io.on("connection", (socket) => {
@@ -157,6 +159,8 @@ io.on("connection", (socket) => {
     console.log(offerObj);
 
     const answererSocketId = manager.getSocketIdFromMap(offerObj.offererId);
+
+    console.log("Socket ID of Patient: ", answererSocketId);
 
     const offerToUpdate = offers.find(
       (o) => o.offererId === offerObj.offererId
