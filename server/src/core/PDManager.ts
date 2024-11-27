@@ -115,8 +115,10 @@ class PDManager {
     let patient: Patient | undefined;
 
     if (this.availableDoctors.length > 0) {
-      doctor = this.availableDoctors.shift()!;
-      patient = this.waitingPatients.shift()!;
+      doctor = this.availableDoctors[0];
+      this.availableDoctors = this.availableDoctors.slice(1);
+      patient = this.waitingPatients[0];
+      this.waitingPatients = this.waitingPatients.slice(1);
       const doctorId = doctor.getId();
       const patientId = patient.getId();
 
