@@ -36,8 +36,8 @@ function Meet() {
       }
     })();
 
-    // localRef.current.srcObject = rtcmanager.getStream().localStream;
-    // remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
+    localRef.current.srcObject = rtcmanager.getStream().localStream;
+    remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
   }, []);
 
   return (
