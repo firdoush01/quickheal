@@ -21,6 +21,7 @@ const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const connectDB_1 = __importDefault(require("./utils/connectDB"));
 const authRouter_1 = __importDefault(require("./router/authRouter"));
+const adminRouter_1 = __importDefault(require("./router/adminRouter"));
 const Patient_1 = __importDefault(require("./models/Patient"));
 const Doctor_1 = __importDefault(require("./models/Doctor"));
 const PDManager_1 = __importDefault(require("./core/PDManager"));
@@ -58,6 +59,7 @@ app.get("/", (req, res) => {
 });
 // Routers
 app.use("/api/v1/auth", authRouter_1.default);
+app.use("/api/v1/admin", adminRouter_1.default);
 // Socket Operations
 io.on("connection", (socket) => {
     console.log("Client Connected: ", socket.id);
@@ -132,6 +134,7 @@ io.on("connection", (socket) => {
     socket.on("newAnswer", (offerObj, ackFunction) => {
         console.log(offerObj);
         const answererSocketId = manager.getSocketIdFromMap(offerObj.offererId);
+        console.log("Socket ID of Patient: ", answererSocketId);
         const offerToUpdate = offers.find((o) => o.offererId === offerObj.offererId);
         if (!offerToUpdate) {
             console.log("No OfferToUpdate");

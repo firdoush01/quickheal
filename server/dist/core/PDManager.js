@@ -20,10 +20,16 @@ class PDManager {
         return this.instance;
     }
     addDoctor(doctor) {
-        this.doctors.push(doctor);
+        const foundDoctor = this.doctors.find((d) => d.getId() === doctor.getId());
+        if (!foundDoctor) {
+            this.doctors.push(doctor);
+        }
     }
     addPatient(patient) {
-        this.waitingPatients.push(patient);
+        const foundPatient = this.waitingPatients.find((p) => p.getId() === patient.getId());
+        if (!foundPatient) {
+            this.waitingPatients.push(patient);
+        }
     }
     getAvailableDoctors() {
         return this.availableDoctors;
@@ -63,6 +69,12 @@ class PDManager {
     removeDoctor(id) {
         this.doctors = this.doctors.filter((d) => d.getId() !== id);
     }
+    emptyDoctors() {
+        this.doctors = [];
+    }
+    emptyPatient() {
+        this.waitingPatients = [];
+    }
     mapIdToSocket(doctorId, socketId) {
         this.idSocketMap[doctorId] = socketId;
     }
@@ -75,8 +87,10 @@ class PDManager {
         let doctor;
         let patient;
         if (this.availableDoctors.length > 0) {
-            doctor = this.availableDoctors.shift();
-            patient = this.waitingPatients.shift();
+            doctor = this.availableDoctors[0];
+            this.availableDoctors = this.availableDoctors.slice(1);
+            patient = this.waitingPatients[0];
+            this.waitingPatients = this.waitingPatients.slice(1);
             const doctorId = doctor.getId();
             const patientId = patient.getId();
             const dockerSocketId = this.idSocketMap[doctorId];
