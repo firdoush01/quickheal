@@ -39,6 +39,11 @@ class RTCManager {
       this.#didIOffer = true;
       this.#userId = userId;
       socket.emit("newOffer", offer);
+
+      return {
+        localStream: this.#localStream,
+        remoteStream: this.#remoteStream,
+      };
     } catch (error) {
       console.log(error);
     }

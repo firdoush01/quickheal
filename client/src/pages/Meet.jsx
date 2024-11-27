@@ -30,7 +30,9 @@ function Meet() {
 
     (async () => {
       if (connectionType === ConnectionType.PATIENT) {
-        await rtcmanager.call(id);
+        const { localStream, remoteStream } = await rtcmanager.call(id);
+        localRef.current.srcObject = localStream;
+        remoteRef.current.srcObject = remoteStream;
       }
     })();
 
