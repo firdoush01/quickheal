@@ -37,7 +37,7 @@ class PDManager {
 
   addPatient(patient: Patient): void {
     const foundPatient = this.waitingPatients.find(
-      (p) => p.getId() === p.getId()
+      (p) => p.getId() === patient.getId()
     );
     if (!foundPatient) {
       this.waitingPatients.push(patient);
