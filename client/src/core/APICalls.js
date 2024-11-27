@@ -63,7 +63,7 @@ class APICalls {
       `${this.#server_url}/api/v1/auth/admin/register`,
       {
         headers: {
-          authorization: `Bearer ${process.env.PASSCODE}`,
+          authorization: `Bearer ${process.env.REACT_APP_PASSCODE}`,
         },
       },
       {
