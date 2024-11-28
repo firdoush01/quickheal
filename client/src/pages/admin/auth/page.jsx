@@ -30,34 +30,46 @@ const LoginComponent = ({ setIsLogin }) => {
   };
 
   return (
-    <div>
-      <h2>Admin Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Don't have an account?{" "}
-        <span onClick={() => setIsLogin(false)}>Register here</span>
-      </p>
+    <div className='bg-blue-700 h-screen w-screen flex justify-center items-center'>
+      <div className='bg-white p-5 shadow-lg rounded-lg'>
+        <h2 className='text-2xl font-bold text-blue-600'>Admin Login</h2>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-5 py-5'>
+          <div className='flex gap-2 justify-between'>
+            <label>Email</label>
+            <input
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className='bg-blue-400'
+            />
+          </div>
+          <div className='flex gap-2 justify-between'>
+            <label>Password</label>
+            <input
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className='bg-blue-400'
+            />
+          </div>
+          {error && <div style={{ color: "red" }}>{error}</div>}
+          <button
+            type='submit'
+            className='bg-blue-300 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200'>
+            Login
+          </button>
+        </form>
+        <p>
+          Don't have an account?{" "}
+          <span
+            onClick={() => setIsLogin(false)}
+            className='text-blue-600 cursor-pointer'>
+            Register here
+          </span>
+        </p>
+      </div>
     </div>
   );
 };
@@ -92,53 +104,67 @@ const RegisterComponent = ({ setIsLogin }) => {
   };
 
   return (
-    <div>
-      <h2>Admin Registration</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
+    <div className='bg-blue-700 h-screen w-screen flex justify-center items-center'>
+      <div className='bg-white p-5 shadow-lg rounded-lg'>
+        <h2 className='text-2xl font-bold text-blue-600'>Admin Registration</h2>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-5 py-5'>
+          <div className='flex gap-2 justify-between'>
+            <label>Name</label>
+            <input
+              type='text'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className='bg-blue-300'
+            />
+          </div>
 
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <button type="submit">Register</button>
-      </form>
-      <p>
-        Already have an account?{" "}
-        <span onClick={() => setIsLogin(true)}>Login here</span>
-      </p>
+          <div className='flex gap-2 justify-between'>
+            <label>Email</label>
+            <input
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className='bg-blue-300'
+            />
+          </div>
+          <div className='flex gap-2 justify-between'>
+            <label>Password</label>
+            <input
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className='bg-blue-300'
+            />
+          </div>
+          <div className='flex gap-2 justify-between'>
+            <label>Confirm Password</label>
+            <input
+              type='password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className='bg-blue-300'
+            />
+          </div>
+          {error && <div style={{ color: "red" }}>{error}</div>}
+          <button
+            type='submit'
+            className='bg-blue-300 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200'>
+            Register
+          </button>
+        </form>
+        <p>
+          Already have an account?{" "}
+          <span
+            onClick={() => setIsLogin(true)}
+            className='text-blue-600 cursor-pointer'>
+            Login here
+          </span>
+        </p>
+      </div>
     </div>
   );
 };
