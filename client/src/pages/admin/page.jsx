@@ -16,8 +16,8 @@ function AdminPage() {
     <div>
       <h1>admin</h1>
       {!loggedIn ? (
-        <div>
-          <Link to="/admin/auth">Login</Link>
+        <div className='bg-blue p-3'>
+          <Link to='/admin/auth'>Login</Link>
         </div>
       ) : (
         <div>

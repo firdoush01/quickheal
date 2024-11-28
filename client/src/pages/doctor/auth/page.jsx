@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import doctor from "../../../assests/doctor.png";
 import apiCalls from "../../../core/APICalls";
 
 const LoginComponent = ({ setIsLogin }) => {
@@ -32,34 +32,53 @@ const LoginComponent = ({ setIsLogin }) => {
   };
 
   return (
-    <div>
-      <h2>Doctor Login</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='bg-blue-700 h-screen w-screen flex flex-col justify-center items-center'>
+      <div className='bg-white flex shadow-xl flex-col md:flex-row gap-10 p-5 rounded-lg justify-center items-center'>
         <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <img src={doctor} alt='' className='h-52 md:h-72' />
         </div>
         <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <h2 className='text-blue-500 text-3xl font-bold p-3 mb-5'>
+            Welcome Doctor
+          </h2>
+          <form onSubmit={handleSubmit} className='bg-blue-500 p-3 rounded-lg'>
+            <div className='flex w-[70%] md:flex-row gap-5 text-white text-lg md:text-xl p-2 justify-start items-center'>
+              <label className='md:mr-9'>Email</label>
+              <input
+                type='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className='bg-blue-300'
+              />
+            </div>
+            <div className='flex md:flex-row gap-5 text-white text-xl p-2 items-center justify-start'>
+              <label>Password</label>
+              <input
+                type='password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className='bg-blue-300 w-48 md:w-[100%]'
+              />
+            </div>
+            {error && <div style={{ color: "red" }}>{error}</div>}
+            <button
+              type='submit'
+              className='transition-all duration-200 rounded-xl mt-5 text-white text-xl p-2 w-full mx-auto font-bold hover:bg-blue-300 hover:text-black'>
+              Login
+            </button>
+          </form>
+          <p className='text-blue-500 mt-5'>
+            Don't have an account?{" "}
+            <span
+              onClick={() => setIsLogin(false)}
+              className='text-blue-900 cursor-pointer'>
+              Register here
+            </span>
+          </p>
         </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Don't have an account?{" "}
-        <span onClick={() => setIsLogin(false)}>Register here</span>
-      </p>
+      </div>
     </div>
   );
 };
@@ -100,13 +119,15 @@ const RegisterComponent = ({ setIsLogin }) => {
   };
 
   return (
-    <div>
-      <h2>Doctor Registration</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='bg-blue-700 w-screen h-screen'>
+      <h2 className='text-white text-xl md:text-3xl mb-8'>
+        Doctor Registration
+      </h2>
+      <form onSubmit={handleSubmit} className='bg-blue-500 flex flex-col gap-7'>
         <div>
           <label>Name</label>
           <input
-            type="text"
+            type='text'
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -115,7 +136,7 @@ const RegisterComponent = ({ setIsLogin }) => {
         <div>
           <label>Specialization</label>
           <input
-            type="text"
+            type='text'
             value={specialization}
             onChange={(e) => setSpecialization(e.target.value)}
             required
@@ -124,7 +145,7 @@ const RegisterComponent = ({ setIsLogin }) => {
         <div>
           <label>Email</label>
           <input
-            type="email"
+            type='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -133,7 +154,7 @@ const RegisterComponent = ({ setIsLogin }) => {
         <div>
           <label>Password</label>
           <input
-            type="password"
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -142,14 +163,14 @@ const RegisterComponent = ({ setIsLogin }) => {
         <div>
           <label>Confirm Password</label>
           <input
-            type="password"
+            type='password'
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
         </div>
         {error && <div style={{ color: "red" }}>{error}</div>}
-        <button type="submit">Register</button>
+        <button type='submit'>Register</button>
       </form>
       <p>
         Already have an account?{" "}
