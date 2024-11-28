@@ -65,7 +65,7 @@ const LoginComponent = ({ setIsLogin }) => {
             {error && <div style={{ color: "red" }}>{error}</div>}
             <button
               type='submit'
-              className='transition-all duration-200 rounded-xl mt-5 text-white text-xl p-2 w-full mx-auto font-bold hover:bg-blue-300 hover:text-black'>
+              className='text-blue-700 bg-white font-bold hover:bg-blue-400 transition-all duration-200 p-3 rounded-lg w-full mx-auto mt-5'>
               Login
             </button>
           </form>
@@ -119,63 +119,81 @@ const RegisterComponent = ({ setIsLogin }) => {
   };
 
   return (
-    <div className='bg-blue-700 w-screen h-screen'>
-      <h2 className='text-white text-xl md:text-3xl mb-8'>
-        Doctor Registration
-      </h2>
-      <form onSubmit={handleSubmit} className='bg-blue-500 flex flex-col gap-7'>
+    <div className='bg-blue-700 w-screen h-screen flex justify-center items-center'>
+      <div className='bg-white flex shadow-xl flex-col md:flex-row gap-10 p-3 rounded-lg justify-center items-center'>
         <div>
-          <label>Name</label>
-          <input
-            type='text'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <img src={doctor} alt='' className='h-52 md:h-72' />
         </div>
         <div>
-          <label>Specialization</label>
-          <input
-            type='text'
-            value={specialization}
-            onChange={(e) => setSpecialization(e.target.value)}
-            required
-          />
+          <h2 className='text-blue-500 text-3xl font-bold p-3 mb-5'>
+            Welcome Doctor
+          </h2>
+          <form
+            onSubmit={handleSubmit}
+            className='bg-blue-500 flex flex-col gap-7 p-3 rounded-lg'>
+            <div className='flex justify-between'>
+              <label className='text-white font-bold'>Name</label>
+              <input
+                type='text'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className='bg-blue-300'
+              />
+            </div>
+            <div className='flex justify-between'>
+              <label className='text-white font-bold'>Specialization</label>
+              <input
+                type='text'
+                value={specialization}
+                onChange={(e) => setSpecialization(e.target.value)}
+                required
+                className='bg-blue-300'
+              />
+            </div>
+            <div className='flex justify-between'>
+              <label className='text-white font-bold'>Email</label>
+              <input
+                type='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className='bg-blue-300'
+              />
+            </div>
+            <div className='flex justify-between'>
+              <label className='text-white font-bold'>Password</label>
+              <input
+                type='password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className='bg-blue-300'
+              />
+            </div>
+            <div className='flex justify-between'>
+              <label className='text-white font-bold'>Confirm Password</label>
+              <input
+                type='password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className='bg-blue-300'
+              />
+            </div>
+            {error && <div style={{ color: "red" }}>{error}</div>}
+            <button
+              type='submit'
+              className='text-blue-700 bg-white font-bold hover:bg-blue-400 transition-all duration-200 p-3 rounded-lg'>
+              Register
+            </button>
+          </form>
+          <p className='mt-5'>
+            Already have an account?{" "}
+            <span onClick={() => setIsLogin(true)}>Login here</span>
+          </p>
         </div>
-        <div>
-          <label>Email</label>
-          <input
-            type='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Confirm Password</label>
-          <input
-            type='password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <button type='submit'>Register</button>
-      </form>
-      <p>
-        Already have an account?{" "}
-        <span onClick={() => setIsLogin(true)}>Login here</span>
-      </p>
+      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ function Home() {
           <img src={visit} alt='' className='size-80 rounded-lg' />
         </div>
         <div className='flex flex-col justify-center items-center gap-3 p-5 mt-10 md:mt-0 md:ml-32'>
-          <h1 className='text-white text-2xl font-extrabold font-mono text-slate-400'>
+          <h1 className='text-2xl font-extrabold font-mono text-black'>
             Welcome to{" "}
             <span className='bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text'>
               QuickHeal
