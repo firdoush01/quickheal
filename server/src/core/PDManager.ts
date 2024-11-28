@@ -51,8 +51,8 @@ class PDManager {
     return patient;
   }
 
-  getAvailableDoctors(): Doctor[] {
-    return this.availableDoctors;
+  getAvailableDoctors(): string[] {
+    return this.availableDoctors.map((d) => d.getName());
   }
 
   getDoctors(): Doctor[] {

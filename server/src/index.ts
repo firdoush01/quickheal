@@ -130,27 +130,36 @@ io.on("connection", (socket) => {
     const doctorId = data.id;
     const available: boolean = data.available === "true";
 
+    console.log(data);
+
     manager.setDoctorAvailablity(doctorId, available);
     console.log(manager.getAvailableDoctors());
 
     if (available) {
-      socket.emit("doctor:message", "You are available...");
+      socket.emit("doctor:message", { message: "You are available..." });
     } else {
-      socket.emit("doctor:message", "You are unavailable...");
+      socket.emit("doctor:message", { message: "You are unavailable..." });
     }
   });
 
   socket.on("patient:request", (data) => {
-    manager.mapIdToSocket(data.id, socket.id);
-    const patient = manager.getPatientById(data.id);
-    if (patient) {
-      manager.addToWaitingList(patient);
+    const { patient } = data;
+    manager.mapIdToSocket(patient.id, socket.id);
+
+    console.log(patient);
+
+    const p = manager.getPatientById(patient.id);
+
+    if (p) {
+      manager.addToWaitingList(p);
     }
 
-    socket.emit(
-      "patient:message",
-      "Add to the Waiting List, waiting for the doctor to answer"
-    );
+    console.log("inside the patient request");
+    console.log("Waiting List: ", manager.getWaitingPatients());
+
+    socket.emit("patient:message", {
+      message: "Add to the Waiting List, waiting for the doctor to answer",
+    });
   });
 
   socket.on("newOffer", (newOffer) => {
