@@ -93,7 +93,7 @@ io.on("connection", (socket) => {
           console.log(manager.getWaitingPatients());
 
           socket.emit("patient:message", {
-            message: "Add to the waiting list",
+            message: "Add to the list",
           });
         }
       }
@@ -132,11 +132,31 @@ io.on("connection", (socket) => {
 
     manager.setDoctorAvailablity(doctorId, available);
     console.log(manager.getAvailableDoctors());
+
+    if (available) {
+      socket.emit("doctor:message", "You are available...");
+    } else {
+      socket.emit("doctor:message", "You are unavailable...");
+    }
+  });
+
+  socket.on("patient:request", (data) => {
+    manager.mapIdToSocket(data.id, socket.id);
+    const patient = manager.getPatientById(data.id);
+    if (patient) {
+      manager.addToWaitingList(patient);
+    }
+
+    socket.emit(
+      "patient:message",
+      "Add to the Waiting List, waiting for the doctor to answer"
+    );
   });
 
   socket.on("newOffer", (newOffer) => {
     console.log("Offer Received!");
     const match = manager.matchConsultation();
+    socket.emit("patient:message", "Matching Doctor....");
     console.log(match);
 
     if (match) {

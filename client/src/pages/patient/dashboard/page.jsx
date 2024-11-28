@@ -28,6 +28,9 @@ function PatientDashboard() {
   }, [socket]);
 
   function call() {
+    socket.emit("patient:request", {
+      patient,
+    });
     navigate("/meet");
   }
 

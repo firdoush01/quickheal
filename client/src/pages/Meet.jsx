@@ -8,10 +8,17 @@ const ConnectionType = {
 };
 
 function Meet() {
+  const [message, setMessage] = useState("");
   const localRef = useRef();
   const remoteRef = useRef();
 
   useEffect(() => {
+    socket.on("patient:message", (data) => {
+      setMessage(data);
+    });
+    socket.on("doctor:message", (data) => {
+      setMessage(data);
+    });
     socket.on("answerResponse", async (offerObj) => {
       console.log(offerObj);
       await rtcmanager.addAnswer(offerObj);
@@ -33,17 +40,17 @@ function Meet() {
         const { localStream, remoteStream } = await rtcmanager.call(id);
         localRef.current.srcObject = localStream;
         remoteRef.current.srcObject = remoteStream;
+      } else if (connectionType === ConnectionType.DOCTOR) {
+        localRef.current.srcObject = rtcmanager.getStream().localStream;
+        remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
       }
     })();
-
-    localRef.current.srcObject = rtcmanager.getStream().localStream;
-    remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
   }, []);
 
   return (
     <div>
       <div id="waiting" class="btn btn-warning">
-        Waiting for answer...
+        {message}
       </div>
       <video ref={localRef} autoplay playsinline controls></video>
       <video ref={remoteRef} autoplay playsinline controls></video>

@@ -13,6 +13,7 @@ interface IMatch {
 class PDManager {
   private static instance: PDManager | null = null;
   private doctors: Doctor[] = [];
+  private patients: Patient[] = [];
   private availableDoctors: Doctor[] = [];
   private waitingPatients: Patient[] = [];
   private session: Session[] = [];
@@ -36,12 +37,18 @@ class PDManager {
   }
 
   addPatient(patient: Patient): void {
-    const foundPatient = this.waitingPatients.find(
+    const foundPatient = this.patients.find(
       (p) => p.getId() === patient.getId()
     );
     if (!foundPatient) {
-      this.waitingPatients.push(patient);
+      this.patients.push(patient);
     }
+  }
+
+  getPatientById(id: string): Patient | null {
+    const patient = this.patients.find((p) => p.getId() === id);
+    if (!patient) return null;
+    return patient;
   }
 
   getAvailableDoctors(): Doctor[] {
@@ -60,11 +67,32 @@ class PDManager {
     return this.waitingPatients.map((patient) => patient.getName());
   }
 
+  addToWaitingList(patient: Patient) {
+    if (!this.waitingPatients.includes(patient)) {
+      this.waitingPatients.push(patient);
+    }
+  }
+
+  firstWaitingPatient() {
+    if (this.waitingPatients.length === 0) return;
+
+    const patient = this.waitingPatients.shift()!;
+    return patient;
+  }
+
   addToAvailableDoctor(doctor: Doctor): void {
     if (!this.availableDoctors.includes(doctor)) {
       this.availableDoctors.push(doctor);
     }
   }
+
+  firstDoctorInList() {
+    if (this.availableDoctors.length === 0) return;
+
+    const doctor = this.availableDoctors.shift()!;
+    return doctor;
+  }
+
   removeFromAvailableDoctor(doctor: Doctor): void {
     this.availableDoctors = this.availableDoctors.filter(
       (d) => d.getId() !== doctor.getId()
@@ -109,16 +137,10 @@ class PDManager {
   }
 
   matchConsultation(): IMatch | null {
-    if (this.waitingPatients.length === 0) return null;
+    let doctor = this.firstDoctorInList();
+    let patient = this.firstWaitingPatient();
 
-    let doctor: Doctor | undefined;
-    let patient: Patient | undefined;
-
-    if (this.availableDoctors.length > 0) {
-      doctor = this.availableDoctors[0];
-      this.availableDoctors = this.availableDoctors.slice(1);
-      patient = this.waitingPatients[0];
-      this.waitingPatients = this.waitingPatients.slice(1);
+    if (patient && doctor) {
       const doctorId = doctor.getId();
       const patientId = patient.getId();
 
