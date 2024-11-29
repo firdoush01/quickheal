@@ -1,8 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { socket } from "../../../utils/socket";
 import { useNavigate } from "react-router-dom";
+import rtcmanager from "../../../core/RTCManager";
 
-function PatientDashboard() {
+function PatientDashboard({
+  callStatus,
+  updateCallStatus,
+  setLocalStream,
+  setRemoteStream,
+  remoteStream,
+  peerConnection,
+  setPeerConnection,
+  localStream,
+  userName,
+  setUserName,
+  offerData,
+  setOfferData,
+}) {
   const [message, setMessage] = useState("");
   const [description, setDescription] = useState("");
   const [patient, setPatient] = useState({});
@@ -27,13 +41,40 @@ function PatientDashboard() {
     });
   }, [socket]);
 
-  function call() {
+  async function call() {
     socket.emit("patient:request", {
       patient: patient,
       description: description,
     });
-    navigate("/meet");
+
+    const localStream = await rtcmanager.fetchMedia();
+    const copyCallStatus = { ...callStatus };
+    copyCallStatus.haveMedia = true;
+    copyCallStatus.videoEnabled = null;
+    copyCallStatus.audioEnabled = false;
+    updateCallStatus(copyCallStatus);
+    setLocalStream(localStream);
+
+    // navigate("/meet");
   }
+
+  useEffect(() => {
+    if (callStatus.haveMedia && !peerConnection) {
+      const { peerConnection, remoteStream } = rtcmanager.createPeerConnection(
+        patient.id,
+        true
+      );
+
+      setPeerConnection(peerConnection);
+      setRemoteStream(remoteStream);
+    }
+  }, [callStatus.haveMedia]);
+
+  useEffect(() => {
+    if (remoteStream && peerConnection) {
+      navigate("/meet/patient");
+    }
+  }, [remoteStream, peerConnection]);
 
   return (
     <div>
