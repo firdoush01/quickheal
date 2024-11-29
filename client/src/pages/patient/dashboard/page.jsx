@@ -11,11 +11,8 @@ function PatientDashboard({
   remoteStream,
   peerConnection,
   setPeerConnection,
-  localStream,
-  userName,
-  setUserName,
-  offerData,
-  setOfferData,
+  connectionType,
+  setConnectionType,
 }) {
   const [message, setMessage] = useState("");
   const [description, setDescription] = useState("");
@@ -28,6 +25,7 @@ function PatientDashboard({
 
     const dataObj = JSON.parse(data);
     setPatient(dataObj);
+    setConnectionType(dataObj.connectionType);
 
     socket.emit("connection-type", {
       id: dataObj.id,
@@ -50,12 +48,10 @@ function PatientDashboard({
     const localStream = await rtcmanager.fetchMedia();
     const copyCallStatus = { ...callStatus };
     copyCallStatus.haveMedia = true;
-    copyCallStatus.videoEnabled = null;
-    copyCallStatus.audioEnabled = false;
+    copyCallStatus.videoEnabled = true;
+    copyCallStatus.audioEnabled = true;
     updateCallStatus(copyCallStatus);
     setLocalStream(localStream);
-
-    // navigate("/meet");
   }
 
   useEffect(() => {

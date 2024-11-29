@@ -146,15 +146,12 @@ io.on("connection", (socket) => {
     const { patient, description } = data;
     manager.mapIdToSocket(patient.id, socket.id);
 
-    console.log(patient);
-
     const p = manager.getPatientById(patient.id);
 
     if (p) {
       manager.addToWaitingList(p, description);
     }
 
-    console.log("inside the patient request");
     console.log("Waiting List: ", manager.getWaitingPatients());
 
     socket.emit("patient:message", {

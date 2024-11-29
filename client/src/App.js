@@ -18,6 +18,7 @@ function App() {
   const [remoteStream, setRemoteStream] = useState(null);
   const [peerConnection, setPeerConnection] = useState(null);
   const [offerData, setOfferData] = useState(null);
+  const [connectionType, setConnectionType] = useState(null);
 
   return (
     <BrowserRouter>
@@ -43,11 +44,13 @@ function App() {
               setPeerConnection={setPeerConnection}
               offerData={offerData}
               setOfferData={setOfferData}
+              connectionType={connectionType}
+              setConnectionType={setConnectionType}
             />
           }
         />
         <Route
-          path="/dashboard/Patient"
+          path="/dashboard/patient"
           element={
             <PatientDashboard
               callStatus={callStatus}
@@ -60,6 +63,8 @@ function App() {
               setPeerConnection={setPeerConnection}
               offerData={offerData}
               setOfferData={setOfferData}
+              connectionType={connectionType}
+              setConnectionType={setConnectionType}
             />
           }
         />
@@ -77,6 +82,7 @@ function App() {
               setRemoteStream={setRemoteStream}
               peerConnection={peerConnection}
               setPeerConnection={setPeerConnection}
+              connectionType={connectionType}
             />
           }
         />
@@ -93,6 +99,7 @@ function App() {
               peerConnection={peerConnection}
               setPeerConnection={setPeerConnection}
               offerData={offerData}
+              connectionType={connectionType}
             />
           }
         />

@@ -16,11 +16,10 @@ function DoctorDashboard({
   remoteStream,
   peerConnection,
   setPeerConnection,
-  localStream,
-  userName,
-  setUserName,
   offerData,
   setOfferData,
+  connectionType,
+  setConnectionType,
 }) {
   const [available, setAvailable] = useState(false);
   const [doctor, setDoctor] = useState({});
@@ -46,6 +45,7 @@ function DoctorDashboard({
 
     const dataObj = JSON.parse(data);
     setDoctor(dataObj);
+    setConnectionType(dataObj.connectionType);
 
     socket.emit("connection-type", {
       id: dataObj.id,
@@ -67,8 +67,8 @@ function DoctorDashboard({
     const localStream = await rtcmanager.fetchMedia();
     const copyCallStatus = { ...callStatus };
     copyCallStatus.haveMedia = true;
-    copyCallStatus.videoEnabled = null;
-    copyCallStatus.audioEnabled = false;
+    copyCallStatus.videoEnabled = true;
+    copyCallStatus.audioEnabled = true;
     updateCallStatus(copyCallStatus);
     setLocalStream(localStream);
 
@@ -81,10 +81,14 @@ function DoctorDashboard({
 
       setPeerConnection(peerConnection);
       setRemoteStream(remoteStream);
-
-      navigate("/meet/doctor");
     }
   }
+
+  useEffect(() => {
+    if (remoteStream && peerConnection) {
+      navigate("/meet/doctor");
+    }
+  }, [remoteStream, peerConnection]);
 
   return (
     <div>
