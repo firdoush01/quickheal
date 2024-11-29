@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import rtcmanager from "../../core/RTCManager";
 import { socket } from "../../utils/socket";
+import ActionButtons from "../components/ActionButtons";
+import { useNavigate } from "react-router-dom";
 
 const ConnectionType = {
   DOCTOR: "doctor",
@@ -13,11 +15,16 @@ function PatientMeet({
   peerConnection,
   callStatus,
   updateCallStatus,
+  connectionType,
 }) {
   const [message, setMessage] = useState("");
 
   const localRef = useRef();
   const remoteRef = useRef();
+
+  const [callEnded, setCallEnded] = useState(false);
+
+  const navigate = useNavigate();
 
   const [requestCreated, setRequestCreated] = useState(false);
 
@@ -69,20 +76,35 @@ function PatientMeet({
       setMessage("Waiting for the Doctor...");
     }
 
-    console.log();
-
     if (!requestCreated && callStatus.haveMedia) {
       makeRequest();
     }
   }, [callStatus.haveMedia, requestCreated]);
+
+  useEffect(() => {
+    if (callEnded) {
+      console.log("inside the if");
+      navigate("/dashboard/patient");
+    }
+  }, [callEnded]);
 
   return (
     <div>
       <div id="waiting" class="btn btn-warning">
         {message}
       </div>
-      <video ref={localRef} autoplay playsinline controls></video>
-      <video ref={remoteRef} autoplay playsinline controls></video>
+      <video ref={localRef} autoPlay playsInline></video>
+      <video ref={remoteRef} autoPlay playsInline></video>
+      <ActionButtons
+        localFeedEl={localRef}
+        remoteFeedEl={localRef}
+        callStatus={callStatus}
+        localStream={localStream}
+        updateCallStatus={updateCallStatus}
+        peerConnection={peerConnection}
+        connectionType={connectionType}
+        setCallEnded={setCallEnded}
+      />
     </div>
   );
 }

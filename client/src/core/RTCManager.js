@@ -69,7 +69,7 @@ class RTCManager {
       try {
         const constraints = {
           video: true,
-          audio: false,
+          audio: true,
         };
         this.#localStream = await navigator.mediaDevices.getUserMedia(
           constraints
@@ -83,7 +83,7 @@ class RTCManager {
     });
   }
   // create pc
-  createPeerConnection(userId, didIOffer, offerObj) {
+  createPeerConnection(userId, didIOffer) {
     this.#peerConnection = new RTCPeerConnection(peerConfiguration);
     this.#remoteStream = new MediaStream();
 
@@ -112,10 +112,6 @@ class RTCManager {
         this.#remoteStream.addTrack(track, this.#remoteStream);
       });
     });
-
-    // if (offerObj) {
-    //   await this.#peerConnection.setRemoteDescription(offerObj.offer);
-    // }
 
     return {
       peerConnection: this.#peerConnection,
