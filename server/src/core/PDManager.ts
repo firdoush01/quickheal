@@ -65,6 +65,10 @@ class PDManager {
     return this.doctors;
   }
 
+  getDoctor(id: string) {
+    return this.doctors.find((p) => p.getId() === id);
+  }
+
   getUnAvailableDoctors(): Doctor[] {
     return this.doctors.filter((d) => d.getAvailability() === false);
   }
@@ -103,9 +107,9 @@ class PDManager {
     return doctor;
   }
 
-  removeFromAvailableDoctor(doctor: Doctor): void {
+  removeFromAvailableDoctor(id: string): void {
     this.availableDoctors = this.availableDoctors.filter(
-      (d) => d.getId() !== doctor.getId()
+      (d) => d.getId() !== id
     );
   }
 
@@ -123,12 +127,16 @@ class PDManager {
       this.addToAvailableDoctor(doctor);
     } else {
       doctor.setAvailable(false);
-      this.removeFromAvailableDoctor(doctor);
+      this.removeFromAvailableDoctor(doctor.getId());
     }
   }
 
   removeDoctor(id: String) {
     this.doctors = this.doctors.filter((d) => d.getId() !== id);
+  }
+
+  removePatient(id: string) {
+    this.patients = this.patients.filter((p) => p.getId() !== id);
   }
 
   emptyDoctors() {

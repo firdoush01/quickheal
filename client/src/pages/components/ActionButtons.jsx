@@ -1,3 +1,14 @@
+import {
+  CiMicrophoneOff,
+  CiMicrophoneOn,
+  CiVideoOff,
+  CiVideoOn,
+} from "react-icons/ci";
+
+import { FiVideo, FiVideoOff } from "react-icons/fi";
+import { FaMicrophoneAlt, FaMicrophoneAltSlash } from "react-icons/fa";
+import { MdCallEnd } from "react-icons/md";
+
 function ActionButtons({
   callStatus,
   localFeedEl,
@@ -65,16 +76,47 @@ function ActionButtons({
     }
   }
 
-  return (
-    <div>
-      <button onClick={videoHandler}>
-        {callStatus.videoEnabled === true ? "Video On" : "Video Off"}
+  const Button = ({ handler, className, children }) => {
+    return (
+      <button
+        onClick={handler}
+        className={`  text-xl font-bold border-2 rounded-full w-14 h-14 flex items-center justify-center ${className}`}
+      >
+        {children}
       </button>
+    );
+  };
 
-      <button onClick={audioHandler}>
-        {callStatus.audioEnabled === true ? "Mic On" : "Mic Off"}
-      </button>
-      <button onClick={callEndHandler}>End</button>
+  return (
+    <div className="flex gap-5 mb-10">
+      <Button
+        handler={audioHandler}
+        className={`${
+          callStatus.audioEnabled === true
+            ? "bg-slate-200 text-black  border-slate-800"
+            : "bg-black text-white  border-slate-500"
+        }`}
+      >
+        {callStatus.audioEnabled === true ? (
+          <FaMicrophoneAlt />
+        ) : (
+          <FaMicrophoneAltSlash />
+        )}
+      </Button>
+      <Button
+        handler={videoHandler}
+        className={`${
+          callStatus.videoEnabled === true
+            ? "bg-slate-200 text-black  border-slate-800"
+            : "bg-black text-white  border-slate-500"
+        }`}
+      >
+        {callStatus.videoEnabled === true ? <FiVideo /> : <FiVideoOff />}
+      </Button>
+
+      <Button handler={callEndHandler} className="bg-red-500 text-white">
+        <MdCallEnd />
+      </Button>
     </div>
   );
 }

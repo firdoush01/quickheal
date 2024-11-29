@@ -1,36 +1,51 @@
 import React from "react";
 import visit from "../assests/visit.jpeg";
+import logo from "../assets/logo.png";
+import { Link } from "react-router-dom";
 function Home() {
   console.log(process.env.REACT_APP_SERVER_URL);
 
   return (
-    <div className='bg-blue-700 p-3 h-screen w-full flex flex-col justify-center items-center gap-10'>
-      <div className='bg-white flex flex-col md:flex-row p-4 justify-center items-center rounded-lg shadow-lg '>
-        <div className='flex flex-col justify-center items-center gap-10'>
-          <img src={visit} alt='' className='size-80 rounded-lg' />
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-900 to-blue-700 text-white">
+      <div className="flex-grow flex flex-col justify-center items-center py-16">
+        <div className="mb-4">
+          <img
+            src={logo}
+            alt="QuickHeal Logo"
+            className="mx-auto w-56 h-auto transition-transform duration-150 ease-out transform hover:scale-110"
+          />
         </div>
-        <div className='flex flex-col justify-center items-center gap-3 p-5 mt-10 md:mt-0 md:ml-32'>
-          <h1 className='text-2xl font-extrabold font-mono text-black'>
-            Welcome to{" "}
-            <span className='bg-gradient-to-r from-blue-600 to-blue-400 text-transparent bg-clip-text'>
-              QuickHeal
-            </span>
-          </h1>
-          <div className='flex gap-5 justify-center items-center'>
-            <a
-              href='/auth/doctor'
-              className='bg-blue-900 p-3 rounded-lg text-white hover:bg-blue-300 hover:text-black transition-all duration-300'>
-              Doctor Login
-            </a>
-            <br />
-            <a
-              href='/auth/patient'
-              className='bg-blue-900 p-3 rounded-lg text-white hover:bg-blue-300 hover:text-black transition-all duration-300'>
-              Patient Login
-            </a>
-          </div>
+
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-white via-teal-300 to-blue-400 bg-clip-text text-transparent animate__animated animate__fadeInLeft animate__delay-0.3s text-center">
+          Welcome to QuickHeal
+        </h1>
+
+        <p className="text-lg text-gray-200 mb-6 animate__animated animate__fadeIn animate__delay-0.6s text-center">
+          Choose your role below to get started.
+        </p>
+
+        <div className="flex flex-col sm:flex-row justify-center gap-4 animate__animated animate__fadeIn animate__delay-0.9s">
+          {/* Doctor Login Button */}
+          <Link
+            to="/auth/doctor"
+            className="text-lg font-semibold px-8 py-4 bg-blue-600 text-white rounded-lg shadow-lg transition-all duration-150 transform hover:scale-105 hover:bg-blue-700 hover:shadow-xl"
+          >
+            Doctor Login
+          </Link>
+          {/* Patient Login Button */}
+          <Link
+            to="/auth/patient"
+            className="text-lg font-semibold px-8 py-4 bg-teal-600 text-white rounded-lg shadow-lg transition-all duration-150 transform hover:scale-105 hover:bg-teal-700 hover:shadow-xl"
+          >
+            Patient Login
+          </Link>
         </div>
       </div>
+
+      {/* Footer Section */}
+      <footer className="w-full py-3 bg-gray-700 text-center text-gray-200 text-sm mt-auto bg-transparent">
+        <p>© 2024 QuickHeal. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

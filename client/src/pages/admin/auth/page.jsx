@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiCalls from "../../../core/APICalls";
+import "animate.css";
+import adminAuthImage from "../../../assets/admin.png";
 
 const LoginComponent = ({ setIsLogin }) => {
   const [email, setEmail] = useState("");
@@ -30,45 +32,64 @@ const LoginComponent = ({ setIsLogin }) => {
   };
 
   return (
-    <div className='bg-blue-700 h-screen w-screen flex justify-center items-center'>
-      <div className='bg-white p-5 shadow-lg rounded-lg'>
-        <h2 className='text-2xl font-bold text-blue-600'>Admin Login</h2>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-5 py-5'>
-          <div className='flex gap-2 justify-between'>
-            <label>Email</label>
-            <input
-              type='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className='bg-blue-400'
-            />
-          </div>
-          <div className='flex gap-2 justify-between'>
-            <label>Password</label>
-            <input
-              type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className='bg-blue-400'
-            />
-          </div>
-          {error && <div style={{ color: "red" }}>{error}</div>}
-          <button
-            type='submit'
-            className='bg-blue-300 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200'>
-            Login
-          </button>
-        </form>
-        <p>
-          Don't have an account?{" "}
-          <span
-            onClick={() => setIsLogin(false)}
-            className='text-blue-600 cursor-pointer'>
-            Register here
-          </span>
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-teal-600">
+      <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-5xl p-4 animate__animated animate__fadeIn">
+        {/* Image Section */}
+        <div className="flex-1 flex justify-center mb-8 md:mb-0">
+          <img
+            src={adminAuthImage}
+            alt="Admin Auth"
+            className="w-32 h-32 md:w-48 md:h-48 lg:w-60 lg:h-60 rounded-full shadow-lg transition-all duration-500 ease-in-out"
+          />
+        </div>
+        {/* Login Form */}
+        <div className="flex-1 bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+          <h2 className="text-3xl font-bold text-center text-teal-600 mb-6">
+            Admin Login
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+            <button
+              type="submit"
+              className="w-full py-3 bg-teal-600 text-white font-semibold rounded-lg shadow-lg hover:bg-teal-700 transform hover:scale-105"
+            >
+              Login
+            </button>
+          </form>
+          <p className="text-center text-sm mt-4 text-gray-600">
+            Don't have an account?{" "}
+            <span
+              className="text-teal-600 cursor-pointer hover:underline"
+              onClick={() => setIsLogin(false)}
+            >
+              Register here
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -104,66 +125,88 @@ const RegisterComponent = ({ setIsLogin }) => {
   };
 
   return (
-    <div className='bg-blue-700 h-screen w-screen flex justify-center items-center'>
-      <div className='bg-white p-5 shadow-lg rounded-lg'>
-        <h2 className='text-2xl font-bold text-blue-600'>Admin Registration</h2>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-5 py-5'>
-          <div className='flex gap-2 justify-between'>
-            <label>Name</label>
-            <input
-              type='text'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className='bg-blue-300'
-            />
-          </div>
-
-          <div className='flex gap-2 justify-between'>
-            <label>Email</label>
-            <input
-              type='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className='bg-blue-300'
-            />
-          </div>
-          <div className='flex gap-2 justify-between'>
-            <label>Password</label>
-            <input
-              type='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className='bg-blue-300'
-            />
-          </div>
-          <div className='flex gap-2 justify-between'>
-            <label>Confirm Password</label>
-            <input
-              type='password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className='bg-blue-300'
-            />
-          </div>
-          {error && <div style={{ color: "red" }}>{error}</div>}
-          <button
-            type='submit'
-            className='bg-blue-300 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200'>
-            Register
-          </button>
-        </form>
-        <p>
-          Already have an account?{" "}
-          <span
-            onClick={() => setIsLogin(true)}
-            className='text-blue-600 cursor-pointer'>
-            Login here
-          </span>
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-teal-600">
+      <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-5xl p-4 animate__animated animate__fadeIn">
+        {/* Image Section */}
+        <div className="flex-1 flex justify-center mb-8 md:mb-0">
+          <img
+            src={adminAuthImage}
+            alt="Admin Auth"
+            className="w-32 h-32 md:w-48 md:h-48 lg:w-60 lg:h-60 rounded-full shadow-lg transition-all duration-500 ease-in-out"
+          />
+        </div>
+        {/* Registration Form */}
+        <div className="flex-1 bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+          <h2 className="text-3xl font-bold text-center text-teal-600 mb-6">
+            Admin Registration
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700">
+                Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-gray-700">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="w-full p-3 mt-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+            <button
+              type="submit"
+              className="w-full py-3 bg-teal-600 text-white font-semibold rounded-lg shadow-lg hover:bg-teal-700 transform hover:scale-105"
+            >
+              Register
+            </button>
+          </form>
+          <p className="text-center text-sm mt-4 text-gray-600">
+            Already have an account?{" "}
+            <span
+              className="text-teal-600 cursor-pointer hover:underline"
+              onClick={() => setIsLogin(true)}
+            >
+              Login here
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

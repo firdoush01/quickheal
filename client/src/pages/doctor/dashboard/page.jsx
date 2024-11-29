@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../../../utils/socket";
 import { useNavigate } from "react-router-dom";
 import rtcmanager from "../../../core/RTCManager";
+import doctorImage from "../../../assets/doctor dash.png";
+import { motion } from "framer-motion";
+import toast, { Toaster } from "react-hot-toast";
 
 const Options = {
   AVAILABLE: "available",
@@ -24,18 +27,23 @@ function DoctorDashboard({
   const [available, setAvailable] = useState(false);
   const [doctor, setDoctor] = useState({});
   const [message, setMessage] = useState("");
+  const [answerButton, setAnswerButton] = useState("Accept");
   const [incomingCall, setIncomingCall] = useState([]);
   const navigate = useNavigate();
 
   // Socket Calls
   useEffect(() => {
     socket.on("doctor:message", (data) => {
+      console.log(data);
+
       setMessage(data.message);
+      toast(data.message);
     });
 
     socket.on("newOfferAwaiting", async (offers) => {
       console.log(offers);
       setIncomingCall(offers);
+      toast("Incomming Patient 🧑‍🦱");
     });
   }, [socket]);
 
@@ -63,6 +71,7 @@ function DoctorDashboard({
   }, [available]);
 
   async function answer(callData) {
+    setAnswerButton("Allow User Media");
     setOfferData(callData);
     const localStream = await rtcmanager.fetchMedia();
     const copyCallStatus = { ...callStatus };
@@ -82,6 +91,14 @@ function DoctorDashboard({
       setPeerConnection(peerConnection);
       setRemoteStream(remoteStream);
     }
+    setAnswerButton("Connecting..");
+    setAnswerButton("Connect");
+  }
+
+  function logoutHandler() {
+    socket.emit("doctor:logout", doctor);
+    window.localStorage.removeItem("data");
+    navigate("/");
   }
 
   useEffect(() => {
@@ -91,34 +108,117 @@ function DoctorDashboard({
   }, [remoteStream, peerConnection]);
 
   return (
-    <div>
-      <select
-        defaultValue={false}
-        onChange={(e) => setAvailable(e.target.value)}
+    <motion.div
+      className="min-h-screen bg-gray-100 p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }} // Faster fade-in
+    >
+      <div>
+        <Toaster />
+      </div>
+      <motion.div
+        className="max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-6 relative"
+        initial={{ y: -50 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.4 }} // Faster slide-in
       >
-        <option value={true} key={Options.AVAILABLE}>
-          {Options.AVAILABLE}
-        </option>
-        <option value={false} key={Options.UNAVAILABLE}>
-          {Options.UNAVAILABLE}
-        </option>
-      </select>
+        {/* Image Section without Hover Effect */}
+        <motion.div
+          className="w-full mb-6 flex justify-center items-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.3 }} // Faster fade-in for image
+        >
+          <motion.img
+            src={doctorImage}
+            alt="Doctor Dashboard Illustration"
+            className="mx-auto w-1/2 md:w-1/3 lg:w-1/4 h-auto rounded-lg shadow-md"
+            whileHover={{ scale: 1.05 }} // Apply hover effect directly to the image
+            transition={{ type: "spring", stiffness: 300 }}
+          />
+        </motion.div>
 
-      {incomingCall.map((callData, i) => (
-        <div key={i}>
-          <h1>Incomming Patient</h1>
-          <button
-            onClick={() => {
-              answer(callData);
-            }}
+        {/* Header */}
+        <header className="flex justify-between items-center border-b pb-4 mb-6">
+          <h1 className="text-2xl font-bold text-blue-600">Doctor Dashboard</h1>
+          <select
+            value={available}
+            onChange={(e) => setAvailable(e.target.value)}
+            className="px-4 py-2 border rounded-lg bg-gray-50"
           >
-            Answer
-          </button>
-        </div>
-      ))}
+            <option value="true" key={Options.AVAILABLE}>
+              {Options.AVAILABLE}
+            </option>
+            <option value="false" key={Options.UNAVAILABLE}>
+              {Options.UNAVAILABLE}
+            </option>
+          </select>
+        </header>
 
-      <span>{message}</span>
-    </div>
+        {/* Main Content */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div
+            className="bg-green-100 p-6 rounded-lg shadow-md"
+            initial={{ x: -50 }}
+            animate={{ x: 0 }}
+            transition={{ duration: 0.3 }} // Faster slide-in
+          >
+            {incomingCall ? (
+              incomingCall.map((callData, i) => (
+                <div key={i} className="w-full">
+                  <h2 className="text-xl font-semibold text-green-700">
+                    Incoming Patient Call!
+                  </h2>
+                  <button
+                    className="p-2 border border-blue-300 bg-blue-500 text-white rounded-lg my-5"
+                    onClick={() => {
+                      answer(callData);
+                    }}
+                  >
+                    {answerButton}
+                  </button>
+                </div>
+              ))
+            ) : (
+              <h2 className="text-xl font-semibold text-gray-600">
+                No Incoming Calls
+              </h2>
+            )}
+          </motion.div>
+
+          <motion.div
+            className="bg-yellow-100 p-6 rounded-lg shadow-md"
+            initial={{ x: 50 }}
+            animate={{ x: 0 }}
+            transition={{ duration: 0.3 }} // Faster slide-in
+          >
+            <h2 className="text-xl font-semibold text-yellow-700">Messages</h2>
+            <p className="mt-2 text-gray-600">{message || "No new messages"}</p>
+          </motion.div>
+        </section>
+
+        {/* Footer */}
+        <footer className="mt-6 text-center">
+          <motion.p
+            className="text-gray-500 text-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.3 }} // Faster fade-in for footer
+          >
+            Logged in as{" "}
+            <span className="font-medium">{doctor?.name || "Doctor"}</span>
+            <span
+              className="text-blue-400 cursor-pointer ml-4"
+              title="Log out"
+              onClick={logoutHandler}
+            >
+              Log out
+            </span>
+          </motion.p>
+        </footer>
+      </motion.div>
+    </motion.div>
   );
 }
 
