@@ -8,12 +8,26 @@ const Options = {
   UNAVAILABLE: "unavailable",
 };
 
-function DoctorDashboard() {
+function DoctorDashboard({
+  callStatus,
+  updateCallStatus,
+  setLocalStream,
+  setRemoteStream,
+  remoteStream,
+  peerConnection,
+  setPeerConnection,
+  localStream,
+  userName,
+  setUserName,
+  offerData,
+  setOfferData,
+}) {
   const [available, setAvailable] = useState(false);
   const [doctor, setDoctor] = useState({});
   const [message, setMessage] = useState("");
-  const [incomingCall, setIncomingCall] = useState(false);
+  const [incomingCall, setIncomingCall] = useState([]);
   const navigate = useNavigate();
+
   // Socket Calls
   useEffect(() => {
     socket.on("doctor:message", (data) => {
@@ -22,9 +36,7 @@ function DoctorDashboard() {
 
     socket.on("newOfferAwaiting", async (offers) => {
       console.log(offers);
-      setIncomingCall(true);
-      await rtcmanager.answerOffer(offers[0]);
-      navigate("/meet");
+      setIncomingCall(offers);
     });
   }, [socket]);
 
@@ -50,6 +62,30 @@ function DoctorDashboard() {
     console.log(available);
   }, [available]);
 
+  async function answer(callData) {
+    setOfferData(callData);
+    const localStream = await rtcmanager.fetchMedia();
+    const copyCallStatus = { ...callStatus };
+    copyCallStatus.haveMedia = true;
+    copyCallStatus.videoEnabled = null;
+    copyCallStatus.audioEnabled = false;
+    updateCallStatus(copyCallStatus);
+    setLocalStream(localStream);
+
+    if (callStatus.haveMedia && !peerConnection) {
+      const { peerConnection, remoteStream } = rtcmanager.createPeerConnection(
+        doctor.id,
+        false,
+        offerData
+      );
+
+      setPeerConnection(peerConnection);
+      setRemoteStream(remoteStream);
+
+      navigate("/meet/doctor");
+    }
+  }
+
   return (
     <div>
       <select
@@ -64,7 +100,18 @@ function DoctorDashboard() {
         </option>
       </select>
 
-      {incomingCall && <h1>Incomming Patient</h1>}
+      {incomingCall.map((callData, i) => (
+        <div key={i}>
+          <h1>Incomming Patient</h1>
+          <button
+            onClick={() => {
+              answer(callData);
+            }}
+          >
+            Answer
+          </button>
+        </div>
+      ))}
 
       <span>{message}</span>
     </div>

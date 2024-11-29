@@ -27,35 +27,21 @@ class RTCManager {
     };
   }
 
-  async call(obj) {
-    await this.fetchMedia();
-    await this.createPeerConnection();
-
+  async call() {
     try {
       console.log("Creating offer");
       const offer = await this.#peerConnection.createOffer();
 
       this.#peerConnection.setLocalDescription(offer);
-      this.#didIOffer = true;
-      this.#userId = obj.id;
-      socket.emit("patient:request", {
-        patient: obj,
-      });
-      socket.emit("newOffer", offer);
 
-      return {
-        localStream: this.#localStream,
-        remoteStream: this.#remoteStream,
-      };
+      socket.emit("newOffer", offer);
     } catch (error) {
       console.log(error);
     }
   }
 
   async answerOffer(offerObj) {
-    await this.fetchMedia();
-    await this.createPeerConnection(offerObj);
-
+    await this.#peerConnection.setRemoteDescription(offerObj.offer);
     const answer = await this.#peerConnection.createAnswer({});
     await this.#peerConnection.setLocalDescription(answer);
 
@@ -81,9 +67,13 @@ class RTCManager {
   fetchMedia() {
     return new Promise(async (resolve, reject) => {
       try {
-        this.#localStream = await navigator.mediaDevices.getUserMedia({
+        const constraints = {
           video: true,
-        });
+          audio: false,
+        };
+        this.#localStream = await navigator.mediaDevices.getUserMedia(
+          constraints
+        );
 
         resolve(this.#localStream);
       } catch (error) {
@@ -93,43 +83,44 @@ class RTCManager {
     });
   }
   // create pc
-  createPeerConnection(offerObj) {
-    return new Promise(async (resolve, reject) => {
-      this.#peerConnection = new RTCPeerConnection(peerConfiguration);
-      this.#remoteStream = new MediaStream();
+  createPeerConnection(userId, didIOffer, offerObj) {
+    this.#peerConnection = new RTCPeerConnection(peerConfiguration);
+    this.#remoteStream = new MediaStream();
 
-      this.#localStream.getTracks().forEach((track) => {
-        this.#peerConnection.addTrack(track, this.#localStream);
-      });
-
-      this.#peerConnection.addEventListener("signalingstatechange", (e) => {
-        console.log(this.#peerConnection.signalingState);
-      });
-
-      this.#peerConnection.addEventListener("icecandidate", (e) => {
-        console.log("Ice candidate found..");
-        if (e.candidate) {
-          socket.emit("sendIceCandidateToSignalingServer", {
-            iceCandidate: e.candidate,
-            iceUserId: this.#userId,
-            didIOffer: this.#didIOffer,
-          });
-        }
-      });
-
-      this.#peerConnection.addEventListener("track", (e) => {
-        console.log("Got a track from the other peer!");
-        e.streams[0].getTracks().forEach((track) => {
-          this.#remoteStream.addTrack(track, this.#remoteStream);
-        });
-      });
-
-      if (offerObj) {
-        await this.#peerConnection.setRemoteDescription(offerObj.offer);
-      }
-
-      resolve(this.#remoteStream);
+    this.#localStream.getTracks().forEach((track) => {
+      this.#peerConnection.addTrack(track, this.#localStream);
     });
+
+    this.#peerConnection.addEventListener("signalingstatechange", (e) => {
+      console.log(this.#peerConnection.signalingState);
+    });
+
+    this.#peerConnection.addEventListener("icecandidate", (e) => {
+      console.log("Ice candidate found..");
+      if (e.candidate) {
+        socket.emit("sendIceCandidateToSignalingServer", {
+          iceCandidate: e.candidate,
+          iceUserId: userId,
+          didIOffer: didIOffer,
+        });
+      }
+    });
+
+    this.#peerConnection.addEventListener("track", (e) => {
+      console.log("Got a track from the other peer!");
+      e.streams[0].getTracks().forEach((track) => {
+        this.#remoteStream.addTrack(track, this.#remoteStream);
+      });
+    });
+
+    // if (offerObj) {
+    //   await this.#peerConnection.setRemoteDescription(offerObj.offer);
+    // }
+
+    return {
+      peerConnection: this.#peerConnection,
+      remoteStream: this.#remoteStream,
+    };
   }
 
   async addNewIceCandidate(iceCandidate) {
