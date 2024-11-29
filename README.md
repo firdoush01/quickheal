@@ -5,7 +5,7 @@
 
 ## 📖 *Overview*  
 QuickHeal is a comprehensive healthcare web app designed to connect patients and doctors effortlessly.  
-- Patients can consult with doctors via *video calls, manage their **queries, and receive **prescriptions*.  
+- Patients can consult with doctors via *video calls*, manage their **queries**, and receive **prescriptions**.  
 - Doctors can manage *availability*, respond to queries, and provide prescriptions efficiently.  
 - The app also features an *admin panel* for management, accessible via specific routes.  
 
@@ -14,7 +14,7 @@ QuickHeal is a comprehensive healthcare web app designed to connect patients and
 ## ✨ *Key Features*  
 
 ### *For Patients*  
-- 🎥 *Video Consultations: Initiate video calls with available doctors using **Socket.io* for real-time communication.  
+- 🎥 *Video Consultations*: Initiate video calls with available doctors using **Socket.io** for real-time communication.  
 
 ### *For Doctors*  
 - 🟢 *Availability Status*: Toggle status (Available/Unavailable) to indicate readiness for consultations.  
@@ -46,13 +46,14 @@ QuickHeal is a comprehensive healthcare web app designed to connect patients and
 
 ## 🖥️ *Screenshots*  
 ### *Patient Dashboard*  
-![Patient Dashboard](https://via.placeholder.com/800x400?text=Add+patient+dashboard+screenshot+here)  
+![Patient Dashboard](https://github.com/user-attachments/assets/171ec425-980e-44bc-a4fc-d37dab488663)  
 
 ### *Doctor Panel*  
-![Doctor Panel](https://via.placeholder.com/800x400?text=Add+doctor+panel+screenshot+here)  
+![Doctor Panel](https://github.com/user-attachments/assets/683411e1-5c8d-4c4e-ae12-3de6b244c9d2)  
 
 ### *Video Consultation*  
-![Video Consultation](https://via.placeholder.com/800x400?text=Add+video+call+screenshot+here)  
+![Video Consultation](https://github.com/user-attachments/assets/25f55d01-60d9-43ae-a68d-cd1a4e82019a)  
+
 
 ---
 
@@ -62,8 +63,6 @@ QuickHeal is a comprehensive healthcare web app designed to connect patients and
 - Node.js  
 - MongoDB  
 
-### *Installation*  
-bash
 # Clone the repository
 git clone https://github.com/joefelx/quickheal.git
 
@@ -75,6 +74,7 @@ cd client && npm install && cd ../server && npm install
 
 
 ### *Running the Application*  
+
 bash
 # Start the backend server
 cd server && npm run dev
