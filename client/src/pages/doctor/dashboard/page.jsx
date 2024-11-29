@@ -8,12 +8,6 @@ const Options = {
   UNAVAILABLE: "unavailable",
 };
 
-// const connection = {
-//   connectionType: "patient",
-//   token:
-//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50SWQiOiI2NzQ1ZWJlZDYwYmViZjhlMDA3YjlkYmMiLCJwYXRpZW50TmFtZSI6IlN1aGFpbCIsImNvbm5lY3Rpb25UeXBlIjoicGF0aWVudCIsImlhdCI6MTczMjYzNzU4MywiZXhwIjoxNzMyNjU1NTgzfQ.aG6AHa2XwMLR8dWDsVSZZC4soxqQaJeYWA88J-x_gL4",
-// };
-
 function DoctorDashboard() {
   const [available, setAvailable] = useState(false);
   const [doctor, setDoctor] = useState({});
@@ -28,8 +22,6 @@ function DoctorDashboard() {
 
     socket.on("newOfferAwaiting", async (offers) => {
       console.log(offers);
-
-      // createOfferEls(offers);
       setIncomingCall(true);
       await rtcmanager.answerOffer(offers[0]);
       navigate("/meet");
