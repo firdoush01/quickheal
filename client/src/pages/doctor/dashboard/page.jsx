@@ -95,6 +95,12 @@ function DoctorDashboard({
     setAnswerButton("Connect");
   }
 
+  function logoutHandler() {
+    socket.emit("doctor:logout", doctor);
+    window.localStorage.removeItem("data");
+    navigate("/");
+  }
+
   useEffect(() => {
     if (remoteStream && peerConnection) {
       navigate("/meet/doctor");
@@ -202,6 +208,13 @@ function DoctorDashboard({
           >
             Logged in as{" "}
             <span className="font-medium">{doctor?.name || "Doctor"}</span>
+            <span
+              className="text-blue-400 cursor-pointer ml-4"
+              title="Log out"
+              onClick={logoutHandler}
+            >
+              Log out
+            </span>
           </motion.p>
         </footer>
       </motion.div>

@@ -77,6 +77,12 @@ function PatientDashboard({
     }
   }, [remoteStream, peerConnection]);
 
+  function logoutHandler() {
+    socket.emit("patient:logout", patient);
+    window.localStorage.removeItem("data");
+    navigate("/");
+  }
+
   return (
     <motion.div
       className="min-h-screen bg-gray-100 p-6"
@@ -178,6 +184,13 @@ function PatientDashboard({
           <p className="text-gray-500 text-sm">
             Logged in as{" "}
             <span className="font-medium">{patient?.name || "Patient"}</span>
+            <span
+              className="text-blue-400 cursor-pointer ml-4"
+              title="Log out"
+              onClick={logoutHandler}
+            >
+              Log out
+            </span>
           </p>
         </motion.footer>
       </motion.div>

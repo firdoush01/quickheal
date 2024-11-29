@@ -142,6 +142,22 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("doctor:logout", (data) => {
+    const { doctor } = data;
+
+    if (!doctor) return;
+
+    manager.removeFromAvailableDoctor(doctor.id);
+    manager.removeDoctor(doctor.id);
+  });
+  socket.on("patient:logout", (data) => {
+    const { patient } = data;
+
+    if (!patient) return;
+
+    manager.removePatient(patient.id);
+  });
+
   socket.on("patient:request", (data) => {
     const { patient, description } = data;
     manager.mapIdToSocket(patient.id, socket.id);
