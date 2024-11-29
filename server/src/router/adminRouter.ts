@@ -76,6 +76,7 @@ router.post(
     res: Response
   ) => {
     const { email, password } = req.body;
+    console.log(req.body);
 
     try {
       const admin = await Admin.findOne({ email }).select("+password");

@@ -49,18 +49,20 @@ class APICalls {
 
   async loginAdmin(email, password) {
     const response = await axios.post(
-      `${this.#server_url}/api/v1/auth/admin/login`,
+      `${this.#server_url}/api/v1/admin/login`,
       {
         email,
         password,
       }
     );
 
+    window.localStorage.setItem("adminToken", response.data.token);
+
     return response;
   }
   async registerAdmin(name, email, password) {
     const response = await axios.post(
-      `${this.#server_url}/api/v1/auth/admin/register`,
+      `${this.#server_url}/api/v1/admin/register`,
       {
         headers: {
           authorization: `Bearer ${process.env.REACT_APP_PASSCODE}`,
@@ -80,7 +82,7 @@ class APICalls {
       `${this.#server_url}/api/v1/admin/empty/doctors`,
       {
         headers: {
-          authorization: `Bearer `,
+          authorization: `Bearer ${window.localStorage.getItem("adminToken")}`,
         },
       }
     );
@@ -93,7 +95,7 @@ class APICalls {
       `${this.#server_url}/api/v1/admin/empty/patients`,
       {
         headers: {
-          authorization: `Bearer `,
+          authorization: `Bearer ${window.localStorage.getItem("adminToken")}`,
         },
       }
     );
