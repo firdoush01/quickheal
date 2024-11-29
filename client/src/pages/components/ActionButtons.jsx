@@ -67,9 +67,13 @@ function ActionButtons({
 
   return (
     <div>
-      <button onClick={videoHandler}>Video</button>
+      <button onClick={videoHandler}>
+        {callStatus.videoEnabled === true ? "Video On" : "Video Off"}
+      </button>
 
-      <button onClick={audioHandler}>Audio</button>
+      <button onClick={audioHandler}>
+        {callStatus.audioEnabled === true ? "Mic On" : "Mic Off"}
+      </button>
       <button onClick={callEndHandler}>End</button>
     </div>
   );

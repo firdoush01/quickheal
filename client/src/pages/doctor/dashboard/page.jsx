@@ -67,8 +67,8 @@ function DoctorDashboard({
     const localStream = await rtcmanager.fetchMedia();
     const copyCallStatus = { ...callStatus };
     copyCallStatus.haveMedia = true;
-    copyCallStatus.videoEnabled = null;
-    copyCallStatus.audioEnabled = false;
+    copyCallStatus.videoEnabled = true;
+    copyCallStatus.audioEnabled = true;
     updateCallStatus(copyCallStatus);
     setLocalStream(localStream);
 

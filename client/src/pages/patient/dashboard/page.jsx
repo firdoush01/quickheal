@@ -49,7 +49,7 @@ function PatientDashboard({
     const copyCallStatus = { ...callStatus };
     copyCallStatus.haveMedia = true;
     copyCallStatus.videoEnabled = true;
-    copyCallStatus.audioEnabled = false;
+    copyCallStatus.audioEnabled = true;
     updateCallStatus(copyCallStatus);
     setLocalStream(localStream);
   }
