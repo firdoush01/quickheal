@@ -13,23 +13,25 @@ function AdminPage() {
   }, []);
 
   return (
-    <div>
-      <h1>admin</h1>
-      {!loggedIn ? (
-        <div>
-          <Link to="/admin/auth">Login</Link>
-        </div>
-      ) : (
-        <div>
-          <button onClick={apiCalls.emptyDoctorQueue}>
-            Empty Queue Doctor
-          </button>
-          <br />
-          <button onClick={apiCalls.emptyPatientQueue}>
-            Empty Queue Patient
-          </button>
-        </div>
-      )}
+    <div className='bg-blue-700 h-screen w-screen flex justify-center items-center'>
+      <div className='bg-white p-3 rounded-lg'>
+        <h1 className='text-3xl text-blue-600 p-3 font-bold'>Admin</h1>
+        {!loggedIn ? (
+          <div className='bg-blue-400 p-3 rounded-lg'>
+            <Link to='/admin/auth'>Login</Link>
+          </div>
+        ) : (
+          <div>
+            <button onClick={apiCalls.emptyDoctorQueue}>
+              Empty Queue Doctor
+            </button>
+            <br />
+            <button onClick={apiCalls.emptyPatientQueue}>
+              Empty Queue Patient
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
