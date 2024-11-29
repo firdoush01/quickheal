@@ -1,8 +1,8 @@
 class Doctor {
   private id: string;
-  private name: String;
+  private name: string;
   private available: boolean;
-  constructor(id: string, name: String) {
+  constructor(id: string, name: string) {
     this.id = id;
     this.name = name;
     this.available = false;
@@ -10,7 +10,7 @@ class Doctor {
   getId(): string {
     return this.id;
   }
-  getName(): String {
+  getName(): string {
     return this.name;
   }
   getAvailability() {

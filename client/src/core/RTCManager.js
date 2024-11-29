@@ -27,7 +27,7 @@ class RTCManager {
     };
   }
 
-  async call(userId) {
+  async call(obj) {
     await this.fetchMedia();
     await this.createPeerConnection();
 
@@ -37,7 +37,10 @@ class RTCManager {
 
       this.#peerConnection.setLocalDescription(offer);
       this.#didIOffer = true;
-      this.#userId = userId;
+      this.#userId = obj.id;
+      socket.emit("patient:request", {
+        patient: obj,
+      });
       socket.emit("newOffer", offer);
 
       return {

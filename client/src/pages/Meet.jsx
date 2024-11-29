@@ -14,10 +14,13 @@ function Meet() {
 
   useEffect(() => {
     socket.on("patient:message", (data) => {
-      setMessage(data);
+      console.log(data);
+
+      setMessage(data.message);
     });
     socket.on("doctor:message", (data) => {
-      setMessage(data);
+      console.log(data);
+      setMessage(data.message);
     });
     socket.on("answerResponse", async (offerObj) => {
       console.log(offerObj);
@@ -37,14 +40,16 @@ function Meet() {
 
     (async () => {
       if (connectionType === ConnectionType.PATIENT) {
-        const { localStream, remoteStream } = await rtcmanager.call(id);
+        const data = window.localStorage.getItem("data");
+        const dataObj = JSON.parse(data);
+        const { localStream, remoteStream } = await rtcmanager.call(dataObj);
         localRef.current.srcObject = localStream;
         remoteRef.current.srcObject = remoteStream;
-      } else if (connectionType === ConnectionType.DOCTOR) {
-        localRef.current.srcObject = rtcmanager.getStream().localStream;
-        remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
       }
     })();
+
+    localRef.current.srcObject = rtcmanager.getStream().localStream;
+    remoteRef.current.srcObject = rtcmanager.getStream().remoteStream;
   }, []);
 
   return (
