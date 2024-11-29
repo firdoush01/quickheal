@@ -143,7 +143,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("patient:request", (data) => {
-    const { patient } = data;
+    const { patient, description } = data;
     manager.mapIdToSocket(patient.id, socket.id);
 
     console.log(patient);
@@ -151,7 +151,7 @@ io.on("connection", (socket) => {
     const p = manager.getPatientById(patient.id);
 
     if (p) {
-      manager.addToWaitingList(p);
+      manager.addToWaitingList(p, description);
     }
 
     console.log("inside the patient request");
@@ -181,6 +181,10 @@ io.on("connection", (socket) => {
       socket
         .to(match.doctorSocketId)
         .emit("newOfferAwaiting", offers.slice(-1));
+
+      socket.to(match.doctorSocketId).emit("doctor:message", {
+        message: match.description,
+      });
     }
   });
 

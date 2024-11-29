@@ -29,7 +29,8 @@ function PatientDashboard() {
 
   function call() {
     socket.emit("patient:request", {
-      patient,
+      patient: patient,
+      description: description,
     });
     navigate("/meet");
   }

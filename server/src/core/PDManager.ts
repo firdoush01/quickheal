@@ -8,6 +8,12 @@ interface IMatch {
   patientId: string;
   doctorSocketId: string;
   patientSocketId: string;
+  description: string;
+}
+
+interface IWaitingPatient {
+  patient: Patient;
+  description: string;
 }
 
 class PDManager {
@@ -15,7 +21,7 @@ class PDManager {
   private doctors: Doctor[] = [];
   private patients: Patient[] = [];
   private availableDoctors: Doctor[] = [];
-  private waitingPatients: Patient[] = [];
+  private waitingPatients: IWaitingPatient[] = [];
   private session: Session[] = [];
   private idSocketMap: Record<string, string> = {};
 
@@ -64,13 +70,17 @@ class PDManager {
   }
 
   getWaitingPatients(): string[] {
-    return this.waitingPatients.map((patient) => patient.getName());
+    return this.waitingPatients.map((w) => w.patient.getName());
   }
 
-  addToWaitingList(patient: Patient) {
-    if (!this.waitingPatients.includes(patient)) {
-      this.waitingPatients.push(patient);
-    }
+  addToWaitingList(patient: Patient, description: string) {
+    if (this.waitingPatients.find((w) => w.patient.getId() === patient.getId()))
+      return;
+
+    this.waitingPatients.push({
+      patient,
+      description,
+    });
   }
 
   firstWaitingPatient() {
@@ -138,16 +148,20 @@ class PDManager {
 
   matchConsultation(): IMatch | null {
     let doctor = this.firstDoctorInList();
-    let patient = this.firstWaitingPatient();
+    let waitingPatient = this.firstWaitingPatient();
 
-    if (patient && doctor) {
+    if (waitingPatient && doctor) {
       const doctorId = doctor.getId();
-      const patientId = patient.getId();
+      const patientId = waitingPatient.patient.getId();
 
       const dockerSocketId = this.idSocketMap[doctorId];
       const patientSocketId = this.idSocketMap[patientId];
 
-      const newSession = new Session(UID.generate(10), doctor, patient);
+      const newSession = new Session(
+        UID.generate(10),
+        doctor,
+        waitingPatient.patient
+      );
       this.session.push(newSession);
 
       return {
@@ -155,6 +169,7 @@ class PDManager {
         patientId: patientId,
         doctorSocketId: dockerSocketId,
         patientSocketId: patientSocketId,
+        description: waitingPatient.description,
       };
     }
 
