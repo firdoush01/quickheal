@@ -113,7 +113,7 @@ io.on("connection", (socket) => {
           manager.mapIdToSocket(doctor.id, socket.id);
           manager.addDoctor(new Doctor(doctor.id, doctor.name));
           socket.emit("doctor:message", {
-            message: "Add to the list",
+            message: "Added To List",
           });
         } else {
           socket.emit("doctor:message", {
@@ -136,9 +136,9 @@ io.on("connection", (socket) => {
     console.log(manager.getAvailableDoctors());
 
     if (available) {
-      socket.emit("doctor:message", { message: "You are available..." });
+      socket.emit("doctor:message", { message: "You are available ✅" });
     } else {
-      socket.emit("doctor:message", { message: "You are unavailable..." });
+      socket.emit("doctor:message", { message: "You are unavailable ⛔" });
     }
   });
 

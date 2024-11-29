@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import rtcmanager from "../../../core/RTCManager";
 import doctorImage from "../../../assets/doctor dash.png";
 import { motion } from "framer-motion";
+import toast, { Toaster } from "react-hot-toast";
 
 const Options = {
   AVAILABLE: "available",
@@ -26,6 +27,7 @@ function DoctorDashboard({
   const [available, setAvailable] = useState(false);
   const [doctor, setDoctor] = useState({});
   const [message, setMessage] = useState("");
+  const [answerButton, setAnswerButton] = useState("Accept");
   const [incomingCall, setIncomingCall] = useState([]);
   const navigate = useNavigate();
 
@@ -35,11 +37,13 @@ function DoctorDashboard({
       console.log(data);
 
       setMessage(data.message);
+      toast(data.message);
     });
 
     socket.on("newOfferAwaiting", async (offers) => {
       console.log(offers);
       setIncomingCall(offers);
+      toast("Incomming Patient 🧑‍🦱");
     });
   }, [socket]);
 
@@ -67,6 +71,7 @@ function DoctorDashboard({
   }, [available]);
 
   async function answer(callData) {
+    setAnswerButton("Allow User Media");
     setOfferData(callData);
     const localStream = await rtcmanager.fetchMedia();
     const copyCallStatus = { ...callStatus };
@@ -86,6 +91,8 @@ function DoctorDashboard({
       setPeerConnection(peerConnection);
       setRemoteStream(remoteStream);
     }
+    setAnswerButton("Connecting..");
+    setAnswerButton("Connect");
   }
 
   useEffect(() => {
@@ -101,6 +108,9 @@ function DoctorDashboard({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }} // Faster fade-in
     >
+      <div>
+        <Toaster />
+      </div>
       <motion.div
         className="max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-6 relative"
         initial={{ y: -50 }}
@@ -150,16 +160,17 @@ function DoctorDashboard({
           >
             {incomingCall ? (
               incomingCall.map((callData, i) => (
-                <div key={i}>
+                <div key={i} className="w-full">
                   <h2 className="text-xl font-semibold text-green-700">
                     Incoming Patient Call!
                   </h2>
                   <button
+                    className="p-2 border border-blue-300 bg-blue-500 text-white rounded-lg my-5"
                     onClick={() => {
                       answer(callData);
                     }}
                   >
-                    Answer
+                    {answerButton}
                   </button>
                 </div>
               ))

@@ -97,22 +97,10 @@ function DoctorMeet({
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 px-4">
-      <div className="w-full max-w-4xl p-4">
+      <div className="w-full max-w-5xl p-4">
         {/* Video layout */}
         <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
-          <div className="relative w-full md:w-1/2">
-            <video
-              ref={localRef}
-              autoPlay
-              playsInline
-              className="w-full h-full rounded-lg border-2 border-gray-600 shadow-lg"
-            ></video>
-            <div className="absolute bottom-2 left-2 text-white text-xs">
-              Local Stream
-            </div>
-          </div>
-
-          <div className="relative w-full md:w-1/2">
+          <div className="relative w-full">
             <video
               ref={remoteRef}
               autoPlay
@@ -120,7 +108,19 @@ function DoctorMeet({
               className="w-full h-full rounded-lg border-2 border-gray-600 shadow-lg"
             ></video>
             <div className="absolute bottom-2 left-2 text-white text-xs">
-              Remote Stream
+              Patient's Stream
+            </div>
+          </div>
+
+          <div className="relative w-1/4 h-1/4">
+            <video
+              ref={localRef}
+              autoPlay
+              playsInline
+              className="w-full h-full rounded-lg border-2 border-gray-600 shadow-lg"
+            ></video>
+            <div className="absolute bottom-2 left-2 text-white text-xs">
+              You
             </div>
           </div>
         </div>

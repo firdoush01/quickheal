@@ -122,7 +122,7 @@ function PatientDashboard({
             animate={{ x: 0 }}
             transition={{ duration: 0.3 }} // Faster slide-in from left
           >
-            <h2 className="text-xl font-semibold text-green-700">
+            {/* <h2 className="text-xl font-semibold text-green-700">
               Describe your concerns
             </h2>
             <textarea
@@ -131,7 +131,7 @@ function PatientDashboard({
               placeholder="Enter your concerns"
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-4 mt-2 border rounded-lg"
-            ></textarea>
+            ></textarea> */}
           </motion.div>
 
           {/* Request a Call Card */}
