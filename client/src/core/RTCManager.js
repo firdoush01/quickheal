@@ -132,8 +132,8 @@ class RTCManager {
     });
   }
 
-  addNewIceCandidate(iceCandidate) {
-    this.#peerConnection.addIceCandidate(iceCandidate);
+  async addNewIceCandidate(iceCandidate) {
+    await this.#peerConnection.addIceCandidate(iceCandidate);
     console.log("Added Ice Candidate");
   }
   // offer

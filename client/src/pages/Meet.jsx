@@ -27,8 +27,8 @@ function Meet() {
       await rtcmanager.addAnswer(offerObj);
     });
 
-    socket.on("receivedIceCandidateFromServer", (iceCandidate) => {
-      rtcmanager.addNewIceCandidate(iceCandidate);
+    socket.on("receivedIceCandidateFromServer", async (iceCandidate) => {
+      await rtcmanager.addNewIceCandidate(iceCandidate);
       console.log(iceCandidate);
     });
   }, [socket]);
