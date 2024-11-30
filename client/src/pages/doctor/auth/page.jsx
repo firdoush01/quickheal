@@ -53,7 +53,7 @@ const LoginComponent = ({ setIsLogin }) => {
         </div>
 
         <h2 className="text-2xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-400">
-          Doctor Registration
+          Doctor Login
         </h2>
 
         {/* Login Form */}
