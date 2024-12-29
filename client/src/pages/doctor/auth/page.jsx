@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiCalls from "../../../core/APICalls";
+import Loader from "../../components/loader"
 import doctorImage from "../../../assets/doctor.png";
 import "animate.css";
 
@@ -10,6 +11,7 @@ const LoginComponent = ({ setIsLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,6 +21,7 @@ const LoginComponent = ({ setIsLogin }) => {
     setError("");
 
     try {
+      setLoader(true)
       const response = await apiCalls.loginDoctor(email, password);
       if (response.status === 200) {
         // Redirect to the doctor's dashboard or home page upon successful login
@@ -29,6 +32,8 @@ const LoginComponent = ({ setIsLogin }) => {
       }
     } catch (error) {
       setError("Invalid credentials. Please try again.");
+    } finally{
+      setLoader(false)
     }
   };
 
@@ -85,9 +90,11 @@ const LoginComponent = ({ setIsLogin }) => {
           {error && <div className="text-sm text-red-500">{error}</div>}
           <button
             type="submit"
-            className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none transition-all duration-300 transform hover:scale-105"
+            className={`flex gap-2 justify-center w-full py-2 text-white bg-blue-500 rounded-lg focus:outline-none transition-all duration-300 transform ${loader ? 'opacity-70' : 'hover:scale-105 hover:bg-blue-600'} `}
+            disabled={loader}
           >
-            Login
+            {loader ? (<div><Loader size="sm" /></div>) : null}
+            {loader ? 'Logging...' : 'Login'}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
@@ -110,6 +117,7 @@ const RegisterComponent = ({ setIsLogin }) => {
   const [password, setPassword] = useState("");
   const [specialization, setSpecialization] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loader, setLoader] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -125,6 +133,7 @@ const RegisterComponent = ({ setIsLogin }) => {
     }
 
     try {
+      setLoader(true)
       const response = await apiCalls.registerDoctor(
         name,
         email,
@@ -136,6 +145,8 @@ const RegisterComponent = ({ setIsLogin }) => {
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
+    } finally{
+      setLoader(false)
     }
   };
 
@@ -226,9 +237,11 @@ const RegisterComponent = ({ setIsLogin }) => {
           {error && <div className="text-sm text-red-500">{error}</div>}
           <button
             type="submit"
-            className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none transition-all duration-300 transform hover:scale-105"
+            className={`flex gap-2 justify-center w-full py-2 text-white bg-blue-500 rounded-lg focus:outline-none transition-all duration-300 transform ${loader ? 'opacity-70' : 'hover:scale-105 hover:bg-blue-600'} `}
+            disabled={loader}
           >
-            Register
+            {loader ? (<div><Loader size="sm" /></div>) : null}
+            {loader ? 'Registering...' : 'Register'}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
